@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Calendarizador</string>
+    <string name="recipe_description">Dexametrozona 3 capsulas 500 mg this is a good test to se whats going on</string>
+    <string name="each">Cada</string>
+    <string name="during">Durante</string>
+</resources>
