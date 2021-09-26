@@ -1,4 +1,4 @@
-package com.beachbody.bod.util.ui.adapter
+package com.recippie.doctor.app.holder
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

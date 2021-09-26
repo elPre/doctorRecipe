@@ -2,18 +2,16 @@ package com.recippie.doctor.app.holder
 
 import com.recippie.doctor.app.databinding.RecipeItemBinding
 import com.recippie.doctor.app.event.RecipeActionEvent
-import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
-import com.recippie.doctor.app.pojo.RecipeModuleItem
+import com.recippie.doctor.app.pojo.Recipe
 
 class RecipeHolder(
-    val binding: RecipeItemBinding,
-    val onAction: (RecipeActionEvent) -> Unit
-) : RecipeBaseViewHolder<ModuleItemDataWrapper<RecipeModuleItem>, RecipeItemBinding>(binding) {
-    override val ivLoading = null
+    private val binding: RecipeItemBinding,
+    val onAction: (RecipeActionEvent) -> Unit,
+) : BaseBindingViewHolder<Recipe, RecipeItemBinding>(binding) {
 
-    override fun bind(item: ModuleItemDataWrapper<RecipeModuleItem>) = with(binding) {
-        with(item.data) {
-            //tvDescription.setText()
-        }
+    override fun bind(item: Recipe) = with(binding) {
+        tvDescription.setText(item.description)
+        tvDuringTime.setText(item.duringTime)
+        tvEachTime.setText(item.eachTime)
     }
 }

@@ -1,10 +1,12 @@
-package com.beachbody.bod.util.ui.adapter
+package com.recippie.doctor.app.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.beachbody.bod.util.extensions.inflater
+import com.recippie.doctor.app.holder.BaseBindingViewHolder
+import com.recippie.doctor.app.util.inflater
+
 
 abstract class BaseBindingAdapter<T, VB : ViewBinding>(private var items: List<T> = listOf()) : RecyclerView.Adapter<BaseBindingViewHolder<T, VB>>() {
 

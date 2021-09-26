@@ -9,7 +9,7 @@ sealed class RecipeModuleItem(override val itemType: RecipeItemType) :
         open val id: String = itemType.toString()
     }
 
-data class RecipeInfo(val data:  List<Recipe>): RecipeModuleItem(RecipeItemType.RECIPE)
+data class RecipeInfo(val data: List<Recipe> = emptyList()): RecipeModuleItem(RecipeItemType.RECIPE)
 
 enum class RecipeItemType {
     RECIPE

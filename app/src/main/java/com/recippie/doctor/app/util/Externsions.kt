@@ -10,10 +10,6 @@ import androidx.annotation.LayoutRes
 import kotlin.random.Random
 import kotlin.random.nextLong
 
-fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
-    return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
-}
-
 val Int.isNegative
     get() = this < 0
 
