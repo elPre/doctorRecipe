@@ -92,3 +92,10 @@ lint/tmp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Intellij
+*.iml
+.idea/*
+.idea/workspace.xml
+.idea/libraries
+.idea/misc.xml
