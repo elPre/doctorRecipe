@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -12,7 +13,7 @@ android {
         targetSdk 30
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true  //ADD THIS LINE
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
