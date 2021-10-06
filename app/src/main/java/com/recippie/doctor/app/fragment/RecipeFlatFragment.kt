@@ -4,16 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.recippie.doctor.app.R
+import com.recippie.doctor.app.databinding.RecipeFlatFragmentBinding
 
-class RecipeFlatFragment: BaseFragment() {
+class RecipeFlatFragment : BaseBindingFragment<RecipeFlatFragmentBinding>() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return return inflater.inflate(R.layout.recipe_item_flat, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     companion object {
         const val TAG = "RecipeFlatFragment"
         fun newInstance() = RecipeFlatFragment()
     }
+
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?)=
+        RecipeFlatFragmentBinding.inflate(inflater, container, false)
 }

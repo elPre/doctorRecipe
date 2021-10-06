@@ -21,6 +21,11 @@ open class BaseFragment : Fragment() {
             throw RuntimeException("Activity must be instance of BaseInterface")
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        retainInstance = true
+    }
+
     override fun onDetach() {
         fragmentDelegate = null
         super.onDetach()

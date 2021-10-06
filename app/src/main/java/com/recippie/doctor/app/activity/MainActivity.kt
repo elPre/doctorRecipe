@@ -1,24 +1,27 @@
 package com.recippie.doctor.app.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Lifecycle
-import com.recippie.doctor.app.interfaces.BaseInterface
 import com.recippie.doctor.app.R
+import com.recippie.doctor.app.databinding.ActivityMainBinding
 import com.recippie.doctor.app.fragment.RecipeFragment
+import com.recippie.doctor.app.interfaces.BaseInterface
 
-class MainActivity : AppCompatActivity(), BaseInterface {
+class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
+
+    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding = ActivityMainBinding::inflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        openFragment(RecipeFragment.newInstance(), RecipeFragment.TAG)
+        if( savedInstanceState == null ) {
+            openFragment(RecipeFragment.newInstance(), RecipeFragment.TAG)
+        }
     }
 
     override fun openFragment(fragment: Fragment, tag: String) {
-        if (!lifecycle.currentState.isAtLeast(Lifecycle.State.CREATED)) return
-        supportFragmentManager.beginTransaction().replace(R.id.content_container, fragment)
+        supportFragmentManager.beginTransaction().add(R.id.content_container, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(tag).commit()
     }
 }
