@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.recippie.doctor.app.databinding.RecipeFlatFragmentBinding
+import com.recippie.doctor.app.databinding.ReceiptFlatFragmentBinding
 
-class RecipeFlatFragment : BaseBindingFragment<RecipeFlatFragmentBinding>() {
+
+class ReceiptFlatFragment : BaseBindingFragment<ReceiptFlatFragmentBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +19,9 @@ class RecipeFlatFragment : BaseBindingFragment<RecipeFlatFragmentBinding>() {
 
     companion object {
         const val TAG = "RecipeFlatFragment"
-        fun newInstance() = RecipeFlatFragment()
+        fun newInstance() = ReceiptFlatFragment()
     }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?)=
-        RecipeFlatFragmentBinding.inflate(inflater, container, false)
+        ReceiptFlatFragmentBinding.inflate(inflater, container, false)
 }

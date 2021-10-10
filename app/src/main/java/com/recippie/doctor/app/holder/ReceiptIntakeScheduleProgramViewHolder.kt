@@ -1,0 +1,32 @@
+package com.recippie.doctor.app.holder
+
+import com.recippie.doctor.app.databinding.MedicineIntakeProgramItemBinding
+import com.recippie.doctor.app.event.ReceiptActionEvent
+import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
+import com.recippie.doctor.app.pojo.CreateProgram
+
+class ReceiptIntakeScheduleProgramViewHolder(
+    val binding: MedicineIntakeProgramItemBinding,
+    val onAction: (ReceiptActionEvent) -> Unit,
+) : ReceiptBaseViewHolder<ModuleItemDataWrapper<CreateProgram>, MedicineIntakeProgramItemBinding>(binding) {
+
+    override val ivLoading = null
+
+    init {
+        with(binding) {
+            etStartDate.setOnClickListener {
+                onAction(ReceiptActionEvent.OpenCalendar)
+            }
+            etStartTime.setOnClickListener {
+                onAction(ReceiptActionEvent.OpenClock)
+            }
+        }
+    }
+
+    override fun bind(item: ModuleItemDataWrapper<CreateProgram>) = with(binding) {
+        with(item.data.data) {
+            etStartDate.setText(dateSchedule)
+            etStartTime.setText(timeSchedule)
+        }
+    }
+}

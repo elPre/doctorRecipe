@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.databinding.ActivityMainBinding
-import com.recippie.doctor.app.fragment.RecipeFragment
+import com.recippie.doctor.app.fragment.ReceiptFragment
 import com.recippie.doctor.app.interfaces.BaseInterface
 
 class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
@@ -16,7 +16,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if( savedInstanceState == null ) {
-            openFragment(RecipeFragment.newInstance(), RecipeFragment.TAG)
+            openFragment(ReceiptFragment.newInstance(), ReceiptFragment.TAG)
         }
     }
 
