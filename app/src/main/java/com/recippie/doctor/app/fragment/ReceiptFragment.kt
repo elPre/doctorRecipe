@@ -6,15 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.recippie.doctor.app.adapter.RecipeAdapter
-import com.recippie.doctor.app.databinding.RecipeFragmentBinding
-import com.recippie.doctor.app.event.RecipeActionEvent
-import com.recippie.doctor.app.viewmodel.RecipeViewModel
+import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.databinding.ReceiptFragmentBinding
+import com.recippie.doctor.app.event.ReceiptActionEvent
+import com.recippie.doctor.app.viewmodel.ReceiptViewModel
 
-class RecipeFragment : BaseBindingFragment<RecipeFragmentBinding>() {
+class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
 
-    private val adapter = RecipeAdapter(::onAction)
-    private val viewModel: RecipeViewModel by viewModels()
+    private val adapter = ReceiptAdapter(::onAction)
+    private val viewModel: ReceiptViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,14 +36,14 @@ class RecipeFragment : BaseBindingFragment<RecipeFragmentBinding>() {
     }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
-        RecipeFragmentBinding.inflate(inflater, container, false)
+        ReceiptFragmentBinding.inflate(inflater, container, false)
 
-    private fun onAction(action: RecipeActionEvent) {
+    private fun onAction(action: ReceiptActionEvent) {
 
     }
 
     companion object {
         const val TAG = "RecipeFragment"
-        fun newInstance() = RecipeFragment()
+        fun newInstance() = ReceiptFragment()
     }
 }
