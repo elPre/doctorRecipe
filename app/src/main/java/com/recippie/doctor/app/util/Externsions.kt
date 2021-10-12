@@ -7,6 +7,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.annotation.LayoutRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlin.random.Random
 import kotlin.random.nextLong
 
@@ -41,3 +43,6 @@ fun View.blink(
 
 val ViewGroup.inflater: LayoutInflater
     get() = LayoutInflater.from(context)
+
+val <T> MutableLiveData<T>.immutable
+    get() = this as LiveData<T>

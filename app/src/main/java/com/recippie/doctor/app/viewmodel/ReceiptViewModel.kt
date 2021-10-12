@@ -26,5 +26,4 @@ class ReceiptViewModel : ViewModel() {
         }
         _recipeList.postValue(list.toList())
     }
-
 }

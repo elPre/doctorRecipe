@@ -5,7 +5,7 @@ import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.CreateProgram
 
-class ReceiptIntakeScheduleProgramViewHolder(
+class CreateProgramViewHolder(
     val binding: MedicineIntakeProgramItemBinding,
     val onAction: (ReceiptActionEvent) -> Unit,
 ) : ReceiptBaseViewHolder<ModuleItemDataWrapper<CreateProgram>, MedicineIntakeProgramItemBinding>(binding) {
@@ -25,8 +25,8 @@ class ReceiptIntakeScheduleProgramViewHolder(
 
     override fun bind(item: ModuleItemDataWrapper<CreateProgram>) = with(binding) {
         with(item.data.data) {
-            etStartDate.setText(dateSchedule)
-            etStartTime.setText(timeSchedule)
+            etStartDate.setText(this?.dateSchedule)
+            etStartTime.setText(this?.timeSchedule)
         }
     }
 }

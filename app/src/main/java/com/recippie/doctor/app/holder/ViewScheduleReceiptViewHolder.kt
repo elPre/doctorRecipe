@@ -5,7 +5,7 @@ import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.ViewScheduleProgram
 
-class ReceiptIntakeScheduleProgramViewProgramViewHolder(
+class ViewScheduleReceiptViewHolder(
     val binding: MedicineIntakeViewScheduleSaveBinding,
     val onAction: (ReceiptActionEvent) -> Unit,
 ) : ReceiptBaseViewHolder<ModuleItemDataWrapper<ViewScheduleProgram>, MedicineIntakeViewScheduleSaveBinding>(binding) {
@@ -13,7 +13,7 @@ class ReceiptIntakeScheduleProgramViewProgramViewHolder(
     override val ivLoading = null
 
     override fun bind(item: ModuleItemDataWrapper<ViewScheduleProgram>) = with(binding) {
-        with(item.data.data) {
+        with(item.data) {
 
         }
     }
