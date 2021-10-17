@@ -11,7 +11,7 @@ import com.recippie.doctor.app.interfaces.BaseInterface
 
 open class BaseFragment : Fragment() {
 
-    private var fragmentDelegate: BaseInterface? = null
+    var fragmentDelegate: BaseInterface? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

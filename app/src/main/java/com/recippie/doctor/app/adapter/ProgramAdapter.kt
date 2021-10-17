@@ -8,8 +8,8 @@ import com.recippie.doctor.app.databinding.MedicineIntakeProgramItemBinding
 import com.recippie.doctor.app.databinding.MedicineIntakeViewScheduleSaveBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.holder.ReceiptBaseViewHolder
-import com.recippie.doctor.app.holder.ReceiptIntakeScheduleProgramViewHolder
-import com.recippie.doctor.app.holder.ReceiptIntakeScheduleProgramViewProgramViewHolder
+import com.recippie.doctor.app.holder.CreateProgramViewHolder
+import com.recippie.doctor.app.holder.ViewScheduleReceiptViewHolder
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.ReceiptItemType
 import com.recippie.doctor.app.pojo.ReceiptModuleItem
@@ -24,14 +24,14 @@ class ProgramAdapter(
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         when (ReceiptItemType.values()[viewType]) {
-            ReceiptItemType.INTAKE_VIEW_PROGRAM -> ReceiptIntakeScheduleProgramViewHolder(
+            ReceiptItemType.INTAKE_PROGRAM_RECEIPT -> CreateProgramViewHolder(
                 MedicineIntakeProgramItemBinding.inflate(
                     parent.inflater,
                     parent,
                     false
                 ), onAction
             )
-            ReceiptItemType.INTAKE_PROGRAM_RECEIPT -> ReceiptIntakeScheduleProgramViewProgramViewHolder(
+            ReceiptItemType.INTAKE_VIEW_PROGRAM -> ViewScheduleReceiptViewHolder(
                 MedicineIntakeViewScheduleSaveBinding.inflate(
                     parent.inflater,
                     parent,
@@ -47,7 +47,6 @@ class ProgramAdapter(
 
     override fun getItemViewType(position: Int) = getItem(position).data.itemType.ordinal
 
-    fun getModuleItem(position: Int) = currentList.getOrNull(position)?.data
 }
 
 object ProgramBaseItemDiff : DiffUtil.ItemCallback<ModuleItemDataWrapper<ReceiptModuleItem>>() {

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.databinding.ActivityMainBinding
 import com.recippie.doctor.app.fragment.ReceiptFragment
+import com.recippie.doctor.app.fragment.ReceiptProgramFragment
 import com.recippie.doctor.app.interfaces.BaseInterface
 
 class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
@@ -21,7 +22,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
     }
 
     override fun openFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.beginTransaction().add(R.id.content_container, fragment)
+        supportFragmentManager.beginTransaction().replace(R.id.content_container, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(tag).commit()
     }
 }

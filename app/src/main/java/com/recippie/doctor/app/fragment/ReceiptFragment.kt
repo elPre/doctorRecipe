@@ -29,7 +29,11 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 orientation = LinearLayoutManager.VERTICAL
             }
             rvRecipe.adapter = adapter
+            fabAdd.setOnClickListener {
+                fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(), ReceiptProgramFragment.TAG)
+            }
         }
+
         viewModel.recipeList.observe(viewLifecycleOwner) {
             adapter.setData(it)
         }
