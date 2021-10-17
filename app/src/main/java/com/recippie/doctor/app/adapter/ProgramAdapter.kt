@@ -47,7 +47,6 @@ class ProgramAdapter(
 
     override fun getItemViewType(position: Int) = getItem(position).data.itemType.ordinal
 
-    fun getModuleItem(position: Int) = currentList.getOrNull(position)?.data
 }
 
 object ProgramBaseItemDiff : DiffUtil.ItemCallback<ModuleItemDataWrapper<ReceiptModuleItem>>() {

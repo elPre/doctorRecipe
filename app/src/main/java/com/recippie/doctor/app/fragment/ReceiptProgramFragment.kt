@@ -27,12 +27,18 @@ class ReceiptProgramFragment: BaseBindingFragment<ReceiptProgramFragmentBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvReceiptProgram.adapter = this@ReceiptProgramFragment.adapter
-        viewModel.moduleItemsLiveData.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
+            adapter.submitList(moduleItems.toList())
         }
     }
 
     private fun onAction(action: ReceiptActionEvent) {
+        when(action){
+            ReceiptActionEvent.SaveProgram -> Unit
+            ReceiptActionEvent.OpenCalendar -> Unit
+            ReceiptActionEvent.OpenClock -> Unit
+            ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()
+        }
     }
 
     companion object {

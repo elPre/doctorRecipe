@@ -13,6 +13,7 @@ import com.recippie.doctor.app.pojo.ProgramReceipt
 import com.recippie.doctor.app.pojo.ReceiptItemType
 import com.recippie.doctor.app.pojo.ReceiptModuleItem
 import com.recippie.doctor.app.pojo.ViewScheduleProgram
+import com.recippie.doctor.app.pojo.ViewScheduleReceipt
 import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -48,7 +49,6 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
             }
         }
         async { loadProgram() }
-        async { loadSchedule() }
     }
 
     override fun loadProgram()= viewModelScope.launch {
@@ -56,7 +56,12 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
     }
 
     override fun loadSchedule()= viewModelScope.launch {
-
+        setLoadingState(ReceiptItemType.INTAKE_VIEW_PROGRAM)
+        val list: MutableList<ViewScheduleReceipt> = mutableListOf()
+        for (i in 1..20) {
+            list.add(ViewScheduleReceipt("medicine $i", "date $i", "time $i"))
+        }
+        ViewScheduleProgram(list).push(ModuleItemLoadingState.LOADED)
     }
 
     companion object {

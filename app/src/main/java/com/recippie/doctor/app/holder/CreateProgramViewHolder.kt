@@ -20,6 +20,9 @@ class CreateProgramViewHolder(
             etStartTime.setOnClickListener {
                 onAction(ReceiptActionEvent.OpenClock)
             }
+            btnProgram.setOnClickListener {
+                onAction(ReceiptActionEvent.ProgramSchedule)
+            }
         }
     }
 

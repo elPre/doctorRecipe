@@ -20,10 +20,10 @@ class ReceiptViewModel : ViewModel() {
     }
 
     private fun loadRecipes() = viewModelScope.launch {
-        var list: MutableList<Receipt> = mutableListOf()
+        val list: MutableList<Receipt> = mutableListOf()
         for (i in 1..20) {
             list.add(Receipt("description $i", "8 hrs", "8 dias"))
         }
-        _recipeList.postValue(list.toList())
+        _recipeList.postValue(list)
     }
 }
