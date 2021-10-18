@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Programar toma de medicamento"
+        android:text="@string/program_intake_medicine"
         tools:text="Programar toma de medicamento"/>
 
     <EditText
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/et_start_time"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Hora de inicio (24 hrs)"
-        android:text="Hora de inicio (24 hrs)"/>
+        android:text="@string/start_time_intake"/>
 
     <EditText
         android:id="@+id/et_start_date"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@id/et_start_date"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Fecha de inicio"
-        android:text="Fecha de inicio"/>
+        android:text="@string/start_date_intake"/>
 
     <Button
         android:id="@+id/btn_program"
@@ -58,7 +58,7 @@
         android:layout_marginRight="10dp"
         app:layout_constraintTop_toBottomOf="@id/tv_start_date_label"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Program"
+        android:text="@string/btn_program"
         tools:text="Program" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

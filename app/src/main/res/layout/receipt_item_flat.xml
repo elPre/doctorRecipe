@@ -31,7 +31,6 @@
                 android:lines="3"
                 android:layout_marginStart="3dp"
                 android:layout_marginLeft="3dp"
-                android:text="Dexametrozona 3 capsulas 500 mg"
                 tools:text="Dexametrozona 3 capsulas 500 mg" />
 
         </androidx.cardview.widget.CardView>
@@ -63,7 +62,6 @@
                 android:id="@+id/tv_each_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8 hrs"
                 tools:text="8 hrs" />
         </androidx.cardview.widget.CardView>
 
@@ -91,7 +89,6 @@
                 android:id="@+id/tv_during_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5 dias"
                 tools:text="5 dias" />
 
         </androidx.cardview.widget.CardView>

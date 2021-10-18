@@ -1,0 +1,22 @@
+package com.recippie.doctor.app.interfaces
+
+import com.recippie.doctor.app.adapter.ReceiptAdapter
+import kotlinx.coroutines.Job
+
+interface BaseReceipt : LoadReceiptPage, LoadReceipt, AddReceipt, DeleteReceipt
+
+interface LoadReceiptPage {
+    fun loadReceiptPage(forceReload: Boolean = true): Job
+}
+
+interface LoadReceipt {
+    fun loadReceipt(): Job
+}
+
+interface AddReceipt {
+    fun addReceipt(adapter: ReceiptAdapter): Job
+}
+
+interface DeleteReceipt {
+    fun deleteReceipt(): Job
+}
