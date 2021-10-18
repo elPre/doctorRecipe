@@ -18,7 +18,7 @@ class CalculationProgramAdapter(
             field = value
             val myScheduleList = value?.data ?: emptyList()
             if(myScheduleList.isNotEmpty()) {
-                setData(myScheduleList)
+                setData(myScheduleList.toMutableList())
             }
         }
 

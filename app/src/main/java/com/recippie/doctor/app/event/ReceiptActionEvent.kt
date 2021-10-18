@@ -5,4 +5,5 @@ sealed class ReceiptActionEvent {
     object OpenClock : ReceiptActionEvent()
     object SaveProgram : ReceiptActionEvent()
     object ProgramSchedule : ReceiptActionEvent()
+    object AddReceipt : ReceiptActionEvent()
 }

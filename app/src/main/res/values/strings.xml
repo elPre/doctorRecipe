@@ -3,4 +3,11 @@
     <string name="recipe_description">Dexametrozona 3 capsulas 500 mg this is a good test to se whats going on</string>
     <string name="each">Cada</string>
     <string name="during">Durante</string>
+    <string name="program_intake_medicine">Programar toma de medicamento</string>
+    <string name="start_time_intake">Hora de inicio (24 hrs)</string>
+    <string name="start_date_intake">Fecha de inicio</string>
+    <string name="btn_program">Program</string>
+    <string name="medicine">Medicine</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>
