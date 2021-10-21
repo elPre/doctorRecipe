@@ -10,4 +10,9 @@
     <string name="medicine">Medicine</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
+    <string name="select_date">Select date</string>
+    <string name="select_time">Select time</string>
+    <string name="time_picker_title">Select Alarm Time</string>
+    <string name="date_picker_title">Select Alarm Date</string>
+
 </resources>

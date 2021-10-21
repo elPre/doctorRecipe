@@ -5,17 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
+import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ProgramAdapter
 import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.viewmodel.ProgramViewModel
 
-class ReceiptProgramFragment: BaseBindingFragment<ReceiptProgramFragmentBinding>() {
+class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
     private val adapter = ProgramAdapter(::onAction)
     private val viewModel: ProgramViewModel by viewModels()
 
-    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?)=
+    override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptProgramFragmentBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,12 +37,44 @@ class ReceiptProgramFragment: BaseBindingFragment<ReceiptProgramFragmentBinding>
     }
 
     private fun onAction(action: ReceiptActionEvent) {
-        when(action){
+        when (action) {
             ReceiptActionEvent.SaveProgram -> Unit
-            ReceiptActionEvent.OpenCalendar -> Unit
-            ReceiptActionEvent.OpenClock -> Unit
+            ReceiptActionEvent.OpenCalendar -> showDatePicker()
+            ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()
+            else -> Unit
         }
+    }
+
+    private fun showTimePicker() {
+        MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_12H)
+            .setHour(12)
+            .setMinute(0)
+            .setTitleText(getString(R.string.time_picker_title))
+            .build().apply {
+                addOnPositiveButtonClickListener {
+                    onTimeSelected(this)
+                }
+            }.show(childFragmentManager, TAG)
+    }
+
+    private fun onTimeSelected(timePicker: MaterialTimePicker) {
+        viewModel.setTime(timePicker)
+    }
+
+    private fun showDatePicker() {
+        MaterialDatePicker.Builder
+            .datePicker()
+            .setTitleText(getString(R.string.date_picker_title))
+            .setSelection(System.currentTimeMillis())
+            .build().apply {
+                addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
+            }.show(childFragmentManager, TAG)
+    }
+
+    private fun onDateSelected(dateTimeStampInMillis: Long) {
+        viewModel.setDate(dateTimeStampInMillis)
     }
 
     companion object {

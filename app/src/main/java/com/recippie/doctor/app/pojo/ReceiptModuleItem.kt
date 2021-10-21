@@ -10,7 +10,7 @@ sealed class ReceiptModuleItem(override val itemType: ReceiptItemType) :
     }
 
 data class CreateProgram(val data: ProgramReceipt?= null): ReceiptModuleItem(ReceiptItemType.INTAKE_PROGRAM_RECEIPT)
-data class ViewScheduleProgram(val data: List<ViewScheduleReceipt> = emptyList()): ReceiptModuleItem(ReceiptItemType.INTAKE_VIEW_PROGRAM)
+data class ViewScheduleProgram(val data: MutableList<ViewScheduleReceipt> = mutableListOf()): ReceiptModuleItem(ReceiptItemType.INTAKE_VIEW_PROGRAM)
 
 enum class ReceiptItemType {
     INTAKE_PROGRAM_RECEIPT,
