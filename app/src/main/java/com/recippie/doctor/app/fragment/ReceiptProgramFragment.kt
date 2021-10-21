@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ProgramAdapter
 import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
@@ -46,17 +47,16 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
     }
 
     private fun showTimePicker() {
-        val timePicker = MaterialTimePicker.Builder()
+        MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_12H)
             .setHour(12)
             .setMinute(0)
-            .setTitleText("Start Alarm Time")
+            .setTitleText(getString(R.string.time_picker_title))
             .build().apply {
                 addOnPositiveButtonClickListener {
                     onTimeSelected(this)
                 }
-            }
-        timePicker.show(childFragmentManager, TAG)
+            }.show(childFragmentManager, TAG)
     }
 
     private fun onTimeSelected(timePicker: MaterialTimePicker) {
@@ -65,9 +65,13 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
 
 
     private fun showDatePicker() {
-        MaterialDatePicker.Builder.datePicker().setSelection(System.currentTimeMillis()).build().apply {
-            addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
-        }.show(childFragmentManager, TAG)
+        MaterialDatePicker.Builder
+            .datePicker()
+            .setTitleText(getString(R.string.date_picker_title))
+            .setSelection(System.currentTimeMillis())
+            .build().apply {
+                addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
+            }.show(childFragmentManager, TAG)
     }
 
 
