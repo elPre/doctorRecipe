@@ -29,8 +29,6 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
     private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
-    var dataList: MutableList<ViewScheduleReceipt> = mutableListOf()
-
     private var date: String = ""
     private var time: String = ""
 
@@ -45,7 +43,6 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
             moduleItems = loadingItems
         }
     }
-
 
     override fun pushModuleList(data: List<ModuleItemDataWrapper<ReceiptModuleItem>>, shouldAnimate: Boolean) {
         _moduleItemsLiveData.postValue(data)

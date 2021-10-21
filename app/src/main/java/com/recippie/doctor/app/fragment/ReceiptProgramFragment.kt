@@ -63,7 +63,6 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
         viewModel.setTime(timePicker)
     }
 
-
     private fun showDatePicker() {
         MaterialDatePicker.Builder
             .datePicker()
@@ -73,7 +72,6 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
                 addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
             }.show(childFragmentManager, TAG)
     }
-
 
     private fun onDateSelected(dateTimeStampInMillis: Long) {
         viewModel.setDate(dateTimeStampInMillis)
