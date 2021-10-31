@@ -29,6 +29,12 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
 
     private var isClicked = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val isNewFragment = savedInstanceState ==  null
+        viewModel.loadReceiptPage(isNewFragment)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {

@@ -1,34 +1,25 @@
 package com.recippie.doctor.app.data
 
 import android.app.Application
-import androidx.annotation.WorkerThread
-import androidx.room.Room
 import com.recippie.doctor.app.db.AppDataBase
 
-class ReceiptRepository(app: Application) {
-    private val db = Room.databaseBuilder(
-        app,
-        AppDataBase::class.java, "database-name"
-    ).build()
+class ReceiptRepository(val app: Application) {
 
+    private val receiptDao = AppDataBase.getInstance(app).receiptDao()
 
-    fun getLastReceipt() = db.receiptDao().getLastReceipt()
+    suspend fun getLastReceipt() = receiptDao.getLastReceipt()
 
-    fun existReceipt() : Boolean = db.receiptDao().existReceipt()
+    suspend fun existReceipt() : Boolean = receiptDao.existReceipt()
 
-    fun getCurrentReceipt(lastReceipt: Int): List<ReceiptData> {
-        return db.receiptDao().currentReceipt(lastReceipt)
+    suspend fun getCurrentReceipt(lastReceipt: Int): List<ReceiptData> {
+        return receiptDao.currentReceipt(lastReceipt)
     }
-    
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
+
     suspend fun insertReceipt(receiptData: ReceiptData) {
-        db.receiptDao().insertReceipt(receiptData)
+        receiptDao.insertReceipt(receiptData)
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     suspend fun removeAlarm(receiptData: ReceiptData) {
-        db.receiptDao().delete(receiptData)
+        receiptDao.delete(receiptData)
     }
 }
