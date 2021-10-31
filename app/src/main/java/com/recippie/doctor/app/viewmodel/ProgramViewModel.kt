@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
 import com.beachbody.bod.base.moduleitems.isLoading
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.recippie.doctor.app.bo.IAlarmActions
+import com.recippie.doctor.app.bo.IBuildAlarm
 import com.recippie.doctor.app.interfaces.BaseProgram
 import com.recippie.doctor.app.moduleitems.IModularViewModel
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
@@ -17,6 +19,7 @@ import com.recippie.doctor.app.pojo.ReceiptModuleItem
 import com.recippie.doctor.app.pojo.ViewScheduleProgram
 import com.recippie.doctor.app.pojo.ViewScheduleReceipt
 import com.recippie.doctor.app.util.immutable
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -25,6 +28,12 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, ReceiptModuleItem>, BaseProgram {
+
+    private val buildAlarm: IBuildAlarm
+        get() {
+            TODO()
+        }
+
 
     private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
@@ -69,6 +78,12 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
             list.add(ViewScheduleReceipt("medicine $i", "date $i", "time $i"))
         }
         ViewScheduleProgram(list).push(ModuleItemLoadingState.LOADED)
+    }
+
+    override fun calculateAlarmDateTimes()= viewModelScope.launch {
+        val times = buildAlarm.calculateTimes()
+        val dates = buildAlarm.calculateDates()
+        buildAlarm.buildAlarmsForReceipt(dates, times)
     }
 
     private fun updateDateAndTime() = viewModelScope.launch {
