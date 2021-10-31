@@ -20,7 +20,6 @@ class ReceiptViewModel(val app : Application) : AndroidViewModel(app), BaseRecei
     private val _recipeList: MutableLiveData<MutableList<Receipt>> = MutableLiveData()
     val recipeList = _recipeList
 
-
     override fun loadReceiptPage(forceReload: Boolean)= viewModelScope.launch {
         if (!forceReload) {
             return@launch
