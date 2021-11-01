@@ -71,6 +71,10 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
         ViewScheduleProgram(list).push(ModuleItemLoadingState.LOADED)
     }
 
+    override fun calculateAlarmDateTimes()= viewModelScope.launch {
+
+    }
+
     private fun updateDateAndTime() = viewModelScope.launch {
         setLoadingState(ReceiptItemType.INTAKE_PROGRAM_RECEIPT)
         CreateProgram(ProgramReceipt(time, date)).push(ModuleItemLoadingState.LOADED)

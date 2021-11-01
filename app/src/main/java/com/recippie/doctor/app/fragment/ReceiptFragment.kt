@@ -1,5 +1,6 @@
 package com.recippie.doctor.app.fragment
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,15 +13,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.databinding.ReceiptFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
+import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SwipeToDeleteCallback
 import com.recippie.doctor.app.viewmodel.ReceiptViewModel
 
 class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
 
     private val adapter = ReceiptAdapter(::onAction)
-    private val viewModel: ReceiptViewModel by viewModels()
+    private val viewModel: ReceiptViewModel by viewModels {
+        ReceiptViewModel.Factory(
+            BuildReceiptBO(ReceiptRepository(requireContext().applicationContext as Application))
+        )
+    }
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open) }
     private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close) }
@@ -28,6 +35,12 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom) }
 
     private var isClicked = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val isNewFragment = savedInstanceState == null
+        viewModel.loadReceiptPage(isNewFragment)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,7 +77,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         ReceiptFragmentBinding.inflate(inflater, container, false)
 
     private fun onAction(action: ReceiptActionEvent) {
-
     }
 
     private fun onAddButtonClicked() {
