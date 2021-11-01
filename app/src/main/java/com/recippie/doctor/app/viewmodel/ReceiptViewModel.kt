@@ -1,46 +1,51 @@
 package com.recippie.doctor.app.viewmodel
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.room.Room
+import androidx.lifecycle.*
 import com.recippie.doctor.app.adapter.ReceiptAdapter
-import com.recippie.doctor.app.db.AppDataBase
+import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseReceipt
 import com.recippie.doctor.app.pojo.Receipt
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class ReceiptViewModel(val app: Application) : AndroidViewModel(app), BaseReceipt {
+class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), BaseReceipt {
 
     private val _recipeList: MutableLiveData<MutableList<Receipt>> = MutableLiveData()
     val recipeList = _recipeList
 
-//    val db = Room.databaseBuilder(
-//        app,
-//        AppDataBase::class.java, "database-name"
-//    ).build()
-
-    override fun loadReceiptPage(forceReload: Boolean)= viewModelScope.launch {
+    override fun loadReceiptPage(forceReload: Boolean) = viewModelScope.launch {
         if (!forceReload) {
             return@launch
         }
-        async { loadReceipt() }
+        loadReceipt()
     }
 
-    override fun loadReceipt()= viewModelScope.launch {
-
+    override fun loadReceipt() = viewModelScope.launch {
+        receiptBo.getCurrentReceipt().let {
+            if (it.isNotEmpty())
+                _recipeList.postValue(it.toMutableList())
+        }
     }
 
-    override fun addReceipt(adapter: ReceiptAdapter)= viewModelScope.launch {
+    override fun addReceipt(adapter: ReceiptAdapter) = viewModelScope.launch {
         adapter.addData(Receipt())
+//        repository.insertReceipt(ReceiptData(
+//            1,
+//            1,
+//            "Tabletas 5mg",
+//            "8",
+//            "6"))
     }
 
-    override fun deleteReceipt()= viewModelScope.launch {
+    override fun deleteReceipt() = viewModelScope.launch {
 
     }
+
+
+    class Factory(private val receiptBO: IBuildReceiptBO) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ReceiptViewModel(receiptBO) as T
+        }
+    }
+
 }
