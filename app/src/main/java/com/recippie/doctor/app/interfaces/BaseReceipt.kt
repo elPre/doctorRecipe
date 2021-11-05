@@ -1,9 +1,10 @@
 package com.recippie.doctor.app.interfaces
 
 import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.pojo.Receipt
 import kotlinx.coroutines.Job
 
-interface BaseReceipt : LoadReceiptPage, LoadReceipt, AddReceipt, DeleteReceipt
+interface BaseReceipt : LoadReceiptPage, LoadReceipt, AddReceipt, DeleteReceipt, SaveFormReceipt
 
 interface LoadReceiptPage {
     fun loadReceiptPage(forceReload: Boolean = true): Job
@@ -19,4 +20,8 @@ interface AddReceipt {
 
 interface DeleteReceipt {
     fun deleteReceipt(): Job
+}
+
+interface SaveFormReceipt {
+    fun saveFormReceipt(list:MutableList<Receipt>): Job
 }

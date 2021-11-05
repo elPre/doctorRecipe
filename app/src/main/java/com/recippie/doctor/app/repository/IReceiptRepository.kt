@@ -5,7 +5,7 @@ import com.recippie.doctor.app.data.ReceiptData
 interface IReceiptRepository : GetLastReceipt, CheckIfReceiptExist, InsertReceipt, DeleteReceipt, GetCurrentReceipt
 
 interface GetLastReceipt {
-    suspend fun getLastReceipt(): Int
+    suspend fun getLastReceipt(): Int?
 }
 
 interface CheckIfReceiptExist {

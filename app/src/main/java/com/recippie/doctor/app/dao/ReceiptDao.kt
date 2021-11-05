@@ -13,7 +13,7 @@ interface ReceiptDao {
     suspend fun existReceipt(): Boolean
 
     @Query("SELECT MAX(num_receipt) FROM receiptdata")
-    suspend fun getLastReceipt(): Int
+    suspend fun getLastReceipt(): Int?
 
     @Query("SELECT * FROM receiptdata WHERE num_receipt = :lastReceipt")
     suspend fun currentReceipt(lastReceipt: Int): List<ReceiptData>

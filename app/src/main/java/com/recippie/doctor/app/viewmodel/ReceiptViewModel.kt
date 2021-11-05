@@ -28,16 +28,14 @@ class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), Ba
 
     override fun addReceipt(adapter: ReceiptAdapter) = viewModelScope.launch {
         adapter.addData(Receipt())
-//        repository.insertReceipt(ReceiptData(
-//            1,
-//            1,
-//            "Tabletas 5mg",
-//            "8",
-//            "6"))
     }
 
     override fun deleteReceipt() = viewModelScope.launch {
 
+    }
+
+    override fun saveFormReceipt(list: MutableList<Receipt>) = viewModelScope.launch {
+        receiptBo.saveReceipt(list)
     }
 
 
