@@ -3,7 +3,7 @@ package com.recippie.doctor.app.bo
 import com.recippie.doctor.app.pojo.Receipt
 import java.util.Date
 
-interface IBuildReceiptBO: CalculateTimes, CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt
+interface IBuildReceiptBO: CalculateTimes, CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt, SaveReceipt
 
 interface CalculateTimes {
     suspend fun calculateTimes(): Int
@@ -19,4 +19,8 @@ interface BuildAlarmsReceipt {
 
 interface GetCurrentReceipt {
     suspend fun getCurrentReceipt(): List<Receipt>
+}
+
+interface SaveReceipt {
+    suspend fun saveReceipt(list:MutableList<Receipt>)
 }

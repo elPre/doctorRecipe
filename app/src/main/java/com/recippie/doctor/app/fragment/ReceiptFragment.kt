@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -16,6 +17,7 @@ import com.recippie.doctor.app.adapter.ReceiptAdapter
 import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.databinding.ReceiptFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
+import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SwipeToDeleteCallback
 import com.recippie.doctor.app.viewmodel.ReceiptViewModel
@@ -58,6 +60,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 isClicked = !isClicked
             }
             fabProgram.setOnClickListener {
+                getInfoFromDynamicForm()
                 fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(), ReceiptProgramFragment.TAG)
                 setAnimation(true)
                 setClickable(true)
@@ -115,6 +118,28 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         } else {
             binding.fabCreate.isClickable = false
             binding.fabProgram.isClickable = false
+        }
+    }
+
+    private fun getInfoFromDynamicForm() {
+        val recyclerView = binding.rvRecipe
+        val itemCount = recyclerView.adapter?.itemCount
+        if(itemCount != null && itemCount > 0) {
+            val list:MutableList<Receipt> = mutableListOf()
+            for (i in 0 until itemCount) {
+                val holder = recyclerView.findViewHolderForAdapterPosition(i)
+                if (holder != null) {
+                    val description = holder.itemView.findViewById<View>(R.id.et_description) as EditText
+                    val during = holder.itemView.findViewById<View>(R.id.et_each_time) as EditText
+                    val each =  holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
+                    list.add(Receipt(
+                        description.text.toString(),
+                        each.text.toString(),
+                        during.text.toString())
+                    )
+                }
+            }
+            viewModel.saveFormReceipt(list)
         }
     }
 

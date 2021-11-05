@@ -26,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/tv_description"
+                android:id="@+id/et_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="5"
@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_each">
 
             <EditText
-                android:id="@+id/tv_each_time"
+                android:id="@+id/et_each_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="8 hrs" />
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_during">
 
             <EditText
-                android:id="@+id/tv_during_time"
+                android:id="@+id/et_during_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="5 dias" />
