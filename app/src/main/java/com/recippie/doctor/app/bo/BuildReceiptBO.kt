@@ -33,15 +33,6 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
     override suspend fun saveReceipt(list: MutableList<Receipt>) {
         if (list.isEmpty()) return
-        var stopInsert = false
-        list.forEach {
-            stopInsert = when {
-                it.description.isNullOrEmpty() || it.duringTime.isNullOrEmpty() || it.eachTime.isNullOrEmpty() -> true
-                else -> false
-            }
-            if (stopInsert) return@forEach
-        }
-        if (stopInsert) return//show snackbar saying that no data was saved
         var receiptNumber = repo.getLastReceipt()
         if (receiptNumber == null) {
             receiptNumber = 1
