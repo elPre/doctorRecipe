@@ -2,10 +2,15 @@ package com.recippie.doctor.app.repository
 
 import com.recippie.doctor.app.data.ReceiptData
 
-interface IReceiptRepository : GetLastReceipt, CheckIfReceiptExist, InsertReceipt, DeleteReceipt, GetCurrentReceipt
+interface IReceiptRepository : GetLastReceipt,
+    CheckIfReceiptExist,
+    InsertReceipt,
+    DeleteReceipt,
+    GetCurrentReceipt,
+    UpdateReceipt
 
 interface GetLastReceipt {
-    suspend fun getLastReceipt(): Int?
+    suspend fun getLastReceipt(): Long?
 }
 
 interface CheckIfReceiptExist {
@@ -21,5 +26,9 @@ interface DeleteReceipt {
 }
 
 interface GetCurrentReceipt {
-    suspend fun getCurrentReceipt(lastReceipt: Int): List<ReceiptData>
+    suspend fun getCurrentReceipt(lastReceipt: Long): List<ReceiptData>
+}
+
+interface UpdateReceipt {
+    suspend fun updateReceipt(receiptData: List<ReceiptData>)
 }

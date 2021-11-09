@@ -13,5 +13,6 @@ class ReceiptHolder(
         etDescription.setText(item.description)
         etDuringTime.setText(item.duringTime)
         etEachTime.setText(item.eachTime)
+        tvReceiptNumber.text = item.numReceipt.toString()
     }
 }

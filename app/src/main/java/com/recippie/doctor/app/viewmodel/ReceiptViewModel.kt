@@ -34,8 +34,8 @@ class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), Ba
 
     }
 
-    override fun saveFormReceipt(list: MutableList<Receipt>) = viewModelScope.launch {
-        receiptBo.saveReceipt(list)
+    override fun saveFormReceipt(list: List<Receipt>) = viewModelScope.launch {
+        receiptBo.saveReceipt(list.toList())
     }
 
 
@@ -45,5 +45,4 @@ class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), Ba
             return ReceiptViewModel(receiptBO) as T
         }
     }
-
 }
