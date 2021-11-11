@@ -23,5 +23,5 @@ interface DeleteReceipt {
 }
 
 interface SaveFormReceipt {
-    fun saveFormReceipt(list:MutableList<Receipt>): Job
+    fun saveFormReceipt(list: List<Receipt>): Job
 }

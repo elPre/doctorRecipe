@@ -23,28 +23,47 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
         if (repo.existReceipt()) {
             val lastReceipt = repo.getLastReceipt()
             lastReceipt?.run {
-                return repo.getCurrentReceipt(this).map {
-                    Receipt(it.description, it.eachTime, it.duringTime)
+                val currentTime = System.currentTimeMillis()
+                val receiptList = repo.getCurrentReceipt(this)
+                receiptList.filter {
+                    currentTime < (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.duringTime.toLong())))
+                }.size.let {
+                    return if (it > 0) {
+                        receiptList.map { data ->
+                            Receipt(
+                                numReceipt = data.numReceipt,
+                                description = data.description,
+                                eachTime = data.eachTime,
+                                duringTime = data.duringTime
+                            )
+                        }
+                    } else {
+                        emptyList()
+                    }
                 }
             }
         }
         return emptyList()
     }
 
-    override suspend fun saveReceipt(list: MutableList<Receipt>) {
+    override suspend fun saveReceipt(list: List<Receipt>) {
         if (list.isEmpty()) return
-        var receiptNumber = repo.getLastReceipt()
-        if (receiptNumber == null) {
-            receiptNumber = 1
-        } else {
-            receiptNumber++
-        }
-        repo.insertReceipt(list.map {
+        val dateTimeInMilliseconds = System.currentTimeMillis()
+        val dbList = list.map {
             ReceiptData(
-                numReceipt = receiptNumber,
+                numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
                 description = it.description,
                 duringTime = it.duringTime,
                 eachTime = it.eachTime)
-        })
+        }
+        if(list[0].numReceipt != null) {
+            repo.updateReceipt(dbList)
+        } else {
+            repo.insertReceipt(dbList)
+        }
+    }
+
+    companion object {
+        private const val MILLISECONDS_IN_DAY = 86400000
     }
 }

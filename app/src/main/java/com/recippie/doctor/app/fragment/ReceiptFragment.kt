@@ -3,19 +3,18 @@ package com.recippie.doctor.app.fragment
 import android.app.Application
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
@@ -138,18 +137,22 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     val description = holder.itemView.findViewById<View>(R.id.et_description) as EditText
                     val during = holder.itemView.findViewById<View>(R.id.et_each_time) as EditText
                     val each = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
+                    val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
                     if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
                         showSnackBar(getString(R.string.not_empty_fields))
                         return false
                     }
-                    list.add(Receipt(
-                        description.text.toString(),
-                        each.text.toString(),
-                        during.text.toString())
+                    list.add(
+                        Receipt(
+                            numReceipt = if(numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
+                            description = description.text.toString(),
+                            eachTime = each.text.toString(),
+                            duringTime = during.text.toString()
+                        )
                     )
                 }
             }
-            viewModel.saveFormReceipt(list)
+            viewModel.saveFormReceipt(list.toList())
         }
         return true
     }

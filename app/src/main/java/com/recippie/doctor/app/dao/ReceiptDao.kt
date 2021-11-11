@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.recippie.doctor.app.data.ReceiptData
 
 @Dao
@@ -13,14 +14,17 @@ interface ReceiptDao {
     suspend fun existReceipt(): Boolean
 
     @Query("SELECT MAX(num_receipt) FROM receiptdata")
-    suspend fun getLastReceipt(): Int?
+    suspend fun getLastReceipt(): Long?
 
     @Query("SELECT * FROM receiptdata WHERE num_receipt = :lastReceipt")
-    suspend fun currentReceipt(lastReceipt: Int): List<ReceiptData>
+    suspend fun currentReceipt(lastReceipt: Long): List<ReceiptData>
 
     @Insert
     suspend fun insertReceipt(vararg receipt: ReceiptData)
 
     @Delete
     suspend fun deleteReceipt(receipt: ReceiptData)
+
+    @Update
+    suspend fun updateReceipt(vararg receipt: ReceiptData)
 }

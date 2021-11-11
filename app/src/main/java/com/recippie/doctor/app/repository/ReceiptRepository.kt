@@ -16,5 +16,7 @@ class ReceiptRepository(val app: Application): IReceiptRepository {
 
     override suspend fun deleteReceipt(receiptData: ReceiptData) = receiptDao.deleteReceipt(receiptData)
 
-    override suspend fun getCurrentReceipt(lastReceipt: Int) = receiptDao.currentReceipt(lastReceipt)
+    override suspend fun getCurrentReceipt(lastReceipt: Long) = receiptDao.currentReceipt(lastReceipt)
+
+    override suspend fun updateReceipt(receiptData: List<ReceiptData>) = receiptDao.updateReceipt(*receiptData.toTypedArray())
 }
