@@ -144,7 +144,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     }
                     list.add(
                         Receipt(
-                            numReceipt = if(numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
+                            numReceipt = if (numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
                             description = description.text.toString(),
                             eachTime = each.text.toString(),
                             duringTime = during.text.toString()
@@ -160,14 +160,10 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
     private fun showSnackBar(msg: String) {
         view?.let { Snackbar.make(it, msg, Snackbar.LENGTH_LONG) }
             ?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    setTextColor(requireContext().getColor(R.color.white))
-                }
+                setTextColor(requireContext().getColor(R.color.white))
                 view.apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        background =
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.snackbar_rounded_rectangle)
-                    }
+                    background =
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.snackbar_rounded_rectangle)
                 }
                 show()
             }
