@@ -1,21 +1,17 @@
 package com.recippie.doctor.app.viewmodel
 
-import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
 import com.beachbody.bod.base.moduleitems.isLoading
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseProgram
 import com.recippie.doctor.app.moduleitems.IModularViewModel
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
-import com.recippie.doctor.app.pojo.CreateProgram
-import com.recippie.doctor.app.pojo.ProgramReceipt
-import com.recippie.doctor.app.pojo.ReceiptItemType
-import com.recippie.doctor.app.pojo.ReceiptModuleItem
-import com.recippie.doctor.app.pojo.ViewScheduleProgram
-import com.recippie.doctor.app.pojo.ViewScheduleReceipt
+import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -24,13 +20,17 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
-class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, ReceiptModuleItem>, BaseProgram {
+class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
+    IModularViewModel<ReceiptItemType, ReceiptModuleItem>,
+    BaseProgram {
 
-    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
+    private val _moduleItemsLiveData =
+        MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
     private var date: String = ""
     private var time: String = ""
+    private var receiptList: List<Receipt> = mutableListOf()
 
     override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
         set(value) {
@@ -44,7 +44,10 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
         }
     }
 
-    override fun pushModuleList(data: List<ModuleItemDataWrapper<ReceiptModuleItem>>, shouldAnimate: Boolean) {
+    override fun pushModuleList(
+        data: List<ModuleItemDataWrapper<ReceiptModuleItem>>,
+        shouldAnimate: Boolean
+    ) {
         _moduleItemsLiveData.postValue(data)
     }
 
@@ -64,15 +67,18 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
     }
 
     override fun loadSchedule() = viewModelScope.launch {
-        val list: MutableList<ViewScheduleReceipt> = mutableListOf()
-        for (i in 1..10) {
-            list.add(ViewScheduleReceipt("medicine $i", "date $i", "time $i"))
+        val list = receiptBo.calculateDateAndTime(receiptList).map {
+            ViewScheduleReceipt(it.medicine, it.date, it.time)
         }
-        ViewScheduleProgram(list).push(ModuleItemLoadingState.LOADED)
+        ViewScheduleProgram(list.toMutableList()).push(ModuleItemLoadingState.LOADED)
     }
 
-    override fun calculateAlarmDateTimes()= viewModelScope.launch {
+    override fun calculateAlarmDateTimes() = viewModelScope.launch {
 
+    }
+
+    override fun setReceiptList(list: List<Receipt>) {
+        receiptList = list
     }
 
     private fun updateDateAndTime() = viewModelScope.launch {
@@ -81,13 +87,12 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
     }
 
     fun setDate(currentSelectedDate: Long) = viewModelScope.launch {
-        date = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val dateTime: LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(currentSelectedDate), ZoneId.systemDefault())
-            val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-            dateAsFormattedText
-        } else {
-            ""
-        }
+        val dateTime: LocalDateTime = LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(currentSelectedDate),
+            ZoneId.systemDefault()
+        )
+        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        date = dateAsFormattedText
         updateDateAndTime()
     }
 
@@ -110,4 +115,12 @@ class ProgramViewModel : ViewModel(), IModularViewModel<ReceiptItemType, Receipt
                 ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING)
             )
     }
+
+    class Factory(private val receiptBO: IBuildReceiptBO) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ProgramViewModel(receiptBO) as T
+        }
+    }
+
 }

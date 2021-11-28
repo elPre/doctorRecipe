@@ -1,29 +1,44 @@
 package com.recippie.doctor.app.fragment
 
+import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ProgramAdapter
+import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
+import com.recippie.doctor.app.pojo.Receipt
+import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.viewmodel.ProgramViewModel
 
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
     private val adapter = ProgramAdapter(::onAction)
-    private val viewModel: ProgramViewModel by viewModels()
+    private val viewModel: ProgramViewModel by viewModels{
+        ProgramViewModel.Factory(
+            BuildReceiptBO(ReceiptRepository(requireContext().applicationContext as Application))
+        )
+    }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptProgramFragmentBinding.inflate(inflater, container, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            val listReceipt = it.getParcelableArrayList<Receipt>(LIST_INFO)
+            listReceipt?.run {
+                viewModel.setReceiptList(this.toList())
+            }
+        }
         val isNewFragment = savedInstanceState == null
         viewModel.loadPage(isNewFragment)
     }
@@ -42,7 +57,6 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
             ReceiptActionEvent.OpenCalendar -> showDatePicker()
             ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()
-            else -> Unit
         }
     }
 
@@ -79,6 +93,11 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
 
     companion object {
         const val TAG = "ReceiptProgramFragment"
-        fun newInstance() = ReceiptProgramFragment()
+        private const val LIST_INFO = "list-info"
+        fun newInstance(listReceipt: List<Receipt>? = null) = ReceiptProgramFragment().apply {
+            arguments = bundleOf(
+                LIST_INFO to listReceipt
+            )
+        }
     }
 }
