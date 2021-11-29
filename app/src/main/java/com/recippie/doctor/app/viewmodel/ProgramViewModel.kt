@@ -15,9 +15,7 @@ import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.time.format.DateTimeFormatter
 
 class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
@@ -28,8 +26,10 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
         MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
-    private var date: String = ""
-    private var time: String = ""
+    private lateinit var date: LocalDate
+    private lateinit var time: LocalTime
+    private var dateS: String = ""
+    private var timeS: String = ""
     private var receiptList: List<Receipt> = mutableListOf()
 
     override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
@@ -67,7 +67,8 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
     }
 
     override fun loadSchedule() = viewModelScope.launch {
-        val list = receiptBo.calculateDateAndTime(receiptList).map {
+        val dateTime = LocalDateTime.of(date, time)
+        val list = receiptBo.calculateDateAndTime(dateTime, receiptList).map {
             ViewScheduleReceipt(it.medicine, it.date, it.time)
         }
         ViewScheduleProgram(list.toMutableList()).push(ModuleItemLoadingState.LOADED)
@@ -83,7 +84,7 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
 
     private fun updateDateAndTime() = viewModelScope.launch {
         setLoadingState(ReceiptItemType.INTAKE_PROGRAM_RECEIPT)
-        CreateProgram(ProgramReceipt(time, date)).push(ModuleItemLoadingState.LOADED)
+        CreateProgram(ProgramReceipt(timeS, dateS)).push(ModuleItemLoadingState.LOADED)
     }
 
     fun setDate(currentSelectedDate: Long) = viewModelScope.launch {
@@ -92,7 +93,8 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
             ZoneId.systemDefault()
         )
         val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        date = dateAsFormattedText
+        date = dateTime.toLocalDate()
+        dateS = dateAsFormattedText
         updateDateAndTime()
     }
 
@@ -104,7 +106,9 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
             String.format("%02d", timePicker.hour) + " : " +
                     String.format("%02d", timePicker.minute) + " AM"
         }
-        time = selectedTime
+        time= LocalTime.of(timePicker.hour,timePicker.minute)
+        timeS = selectedTime
+
         updateDateAndTime()
     }
 

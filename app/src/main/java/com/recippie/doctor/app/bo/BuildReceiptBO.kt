@@ -10,14 +10,14 @@ import java.util.Date
 
 class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
-    override suspend fun calculateDateAndTime(list: List<Receipt>): List<Program> {
+    override suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program> {
         if (list.isEmpty()) return emptyList()
         val resultList = mutableListOf<Program>()
 
         val dateFormatter = DateTimeFormatter.ofPattern(FORMAT_DATE)
         val timeFormatter = DateTimeFormatter.ofPattern(FORMAT_TIME)
 
-        val time: LocalDateTime = LocalDateTime.now()
+        val time: LocalDateTime = dateTime
 
         list.forEach { receipt ->
             var localTime = time
@@ -26,7 +26,8 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 date = dateFormatter.format(time),
                 time = timeFormatter.format(time)
             ))
-            for (i in 2 until receipt.duringTime.toInt()) {
+            var intakeTimes = 24/receipt.eachTime.toInt()*receipt.duringTime.toInt()
+            for (i in 2 until intakeTimes) {
                 localTime = localTime.plusHours(receipt.eachTime.toLong())
                 resultList.add(Program(
                     medicine = receipt.description,
@@ -88,7 +89,7 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
     companion object {
         private const val MILLISECONDS_IN_DAY = 86400000
-        private const val FORMAT_DATE = "dd MMM uuuu"
+        private const val FORMAT_DATE = "dd MMM yyyy"
         private const val FORMAT_TIME = "hh:mm a"
     }
 }
