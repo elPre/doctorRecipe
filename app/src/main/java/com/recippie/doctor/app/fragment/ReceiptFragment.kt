@@ -64,8 +64,9 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 isClicked = !isClicked
             }
             fabProgram.setOnClickListener {
-                if (getInfoFromDynamicForm()) {
-                    fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(), ReceiptProgramFragment.TAG)
+                val infoForm = getInfoFromDynamicForm()
+                if (infoForm.first) {
+                    fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
                     setAnimation(true)
                     setClickable(true)
                     isClicked = !isClicked
@@ -126,7 +127,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         }
     }
 
-    private fun getInfoFromDynamicForm(): Boolean {
+    private fun getInfoFromDynamicForm(): Pair<Boolean, MutableList<Receipt>> {
         val recyclerView = binding.rvRecipe
         val itemCount = recyclerView.adapter?.itemCount
         if (itemCount != null && itemCount > 0) {
@@ -140,11 +141,11 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
                     if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
                         showSnackBar(getString(R.string.not_empty_fields))
-                        return false
+                        return Pair(false, mutableListOf())
                     }
                     list.add(
                         Receipt(
-                            numReceipt = if(numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
+                            numReceipt = if (numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
                             description = description.text.toString(),
                             eachTime = each.text.toString(),
                             duringTime = during.text.toString()
@@ -153,21 +154,18 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 }
             }
             viewModel.saveFormReceipt(list.toList())
+            return Pair(first = true, second = list)
         }
-        return true
+        return Pair(false, mutableListOf())
     }
 
     private fun showSnackBar(msg: String) {
         view?.let { Snackbar.make(it, msg, Snackbar.LENGTH_LONG) }
             ?.apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    setTextColor(requireContext().getColor(R.color.white))
-                }
+                setTextColor(requireContext().getColor(R.color.white))
                 view.apply {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        background =
-                            AppCompatResources.getDrawable(requireContext(), R.drawable.snackbar_rounded_rectangle)
-                    }
+                    background =
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.snackbar_rounded_rectangle)
                 }
                 show()
             }

@@ -1,16 +1,14 @@
 package com.recippie.doctor.app.bo
 
+import com.recippie.doctor.app.pojo.Program
 import com.recippie.doctor.app.pojo.Receipt
+import java.time.LocalDateTime
 import java.util.Date
 
-interface IBuildReceiptBO : CalculateTimes, CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt, SaveReceipt
-
-interface CalculateTimes {
-    suspend fun calculateTimes(): Int
-}
+interface IBuildReceiptBO : CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt, SaveReceipt
 
 interface CalculateDate {
-    suspend fun calculateDates(): List<Date>
+    suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program>
 }
 
 interface BuildAlarmsReceipt {

@@ -1,22 +1,51 @@
 package com.recippie.doctor.app.bo
 
 import com.recippie.doctor.app.data.ReceiptData
+import com.recippie.doctor.app.pojo.Program
 import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.IReceiptRepository
-import java.util.Date
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
-    override suspend fun calculateTimes(): Int {
-        TODO("Not yet implemented")
-    }
+    override suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program> {
 
-    override suspend fun calculateDates(): List<Date> {
-        TODO("Not yet implemented")
+        if (list.isEmpty()) return emptyList()
+        val resultList = mutableListOf<Program>()
+
+        val dateFormatter = DateTimeFormatter.ofPattern(FORMAT_DATE)
+        val timeFormatter = DateTimeFormatter.ofPattern(FORMAT_TIME)
+
+        val time: LocalDateTime = dateTime
+
+        list.reversed().forEach { receipt ->
+            var localTime = time
+            resultList.add(
+                Program(
+                    medicine = receipt.description,
+                    date = dateFormatter.format(time),
+                    time = timeFormatter.format(time)
+                )
+            )
+            val intakeTimes = 24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
+            for (i in 1 until intakeTimes) {
+                localTime = localTime.plusHours(receipt.eachTime.toLong())
+                resultList.add(
+                    Program(
+                        medicine = receipt.description,
+                        date = dateFormatter.format(localTime),
+                        time = timeFormatter.format(localTime)
+                    )
+                )
+            }
+        }
+        return resultList.toList()
     }
 
     override suspend fun buildAlarmsForReceipt(dates: List<Date>, times: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override suspend fun getCurrentReceipt(): List<Receipt> {
@@ -54,9 +83,10 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
                 description = it.description,
                 duringTime = it.duringTime,
-                eachTime = it.eachTime)
+                eachTime = it.eachTime
+            )
         }
-        if(list[0].numReceipt != null) {
+        if (list[0].numReceipt != null) {
             repo.updateReceipt(dbList)
         } else {
             repo.insertReceipt(dbList)
@@ -65,5 +95,7 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
     companion object {
         private const val MILLISECONDS_IN_DAY = 86400000
+        private const val FORMAT_DATE = "dd MMM yyyy"
+        private const val FORMAT_TIME = "hh:mm a"
     }
 }

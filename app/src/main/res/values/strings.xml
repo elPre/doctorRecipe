@@ -15,5 +15,9 @@
     <string name="time_picker_title">Select Alarm Time</string>
     <string name="date_picker_title">Select Alarm Date</string>
     <string name="not_empty_fields">Receipt can\'t have empty fields</string>
+    <string name="each_hrs">hrs</string>
+    <string name="during_days">days</string>
+    <string name="eight_hrs">8</string>
+    <string name="five_days">5</string>
 
 </resources>
