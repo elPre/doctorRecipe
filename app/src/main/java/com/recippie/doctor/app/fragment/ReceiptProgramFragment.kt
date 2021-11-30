@@ -22,7 +22,7 @@ import com.recippie.doctor.app.viewmodel.ProgramViewModel
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
     private val adapter = ProgramAdapter(::onAction)
-    private val viewModel: ProgramViewModel by viewModels{
+    private val viewModel: ProgramViewModel by viewModels {
         ProgramViewModel.Factory(
             BuildReceiptBO(ReceiptRepository(requireContext().applicationContext as Application))
         )
@@ -57,6 +57,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
             ReceiptActionEvent.OpenCalendar -> showDatePicker()
             ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()
+            ReceiptActionEvent.NotEmptyFieldsAllowed -> showSnackbar(getString(R.string.not_empty_fields_program))
         }
     }
 

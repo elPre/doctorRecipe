@@ -1,7 +1,6 @@
 package com.recippie.doctor.app.fragment
 
 import android.app.Application
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,12 +9,10 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
 import com.recippie.doctor.app.bo.BuildReceiptBO
@@ -66,10 +63,10 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             fabProgram.setOnClickListener {
                 val infoForm = getInfoFromDynamicForm()
                 if (infoForm.first) {
-                    fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
                     setAnimation(true)
                     setClickable(true)
                     isClicked = !isClicked
+                    fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
                 }
             }
             fabAction.setOnClickListener {
@@ -85,8 +82,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptFragmentBinding.inflate(inflater, container, false)
 
-    private fun onAction(action: ReceiptActionEvent) {
-    }
+    private fun onAction(action: ReceiptActionEvent) { }
 
     private fun onAddButtonClicked() {
         setVisibility(isClicked)
@@ -140,7 +136,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     val each = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
                     val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
                     if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
-                        showSnackBar(getString(R.string.not_empty_fields))
+                        showSnackbar(getString(R.string.not_empty_fields))
                         return Pair(false, mutableListOf())
                     }
                     list.add(
@@ -157,18 +153,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             return Pair(first = true, second = list)
         }
         return Pair(false, mutableListOf())
-    }
-
-    private fun showSnackBar(msg: String) {
-        view?.let { Snackbar.make(it, msg, Snackbar.LENGTH_LONG) }
-            ?.apply {
-                setTextColor(requireContext().getColor(R.color.white))
-                view.apply {
-                    background =
-                        AppCompatResources.getDrawable(requireContext(), R.drawable.snackbar_rounded_rectangle)
-                }
-                show()
-            }
     }
 
     companion object {

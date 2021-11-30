@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">Calendarizador</string>
-    <string name="recipe_description">Dexametrozona 3 capsulas 500 mg this is a good test to se whats going on</string>
-    <string name="each">Cada</string>
-    <string name="during">Durante</string>
-    <string name="program_intake_medicine">Programar toma de medicamento</string>
-    <string name="start_time_intake">Hora de inicio (24 hrs)</string>
-    <string name="start_date_intake">Fecha de inicio</string>
+    <string name="app_name">Medicine/Supplement Scheduler</string>
+    <string name="recipe_description">Dexametrozona 3 cap 500 mg this is a good test to se whats going on</string>
+    <string name="each">Each</string>
+    <string name="during">During</string>
+    <string name="program_intake_medicine">Program intake medicine</string>
+    <string name="start_time_intake">Start hour</string>
+    <string name="start_date_intake">Start date</string>
     <string name="btn_program">Program</string>
-    <string name="medicine">Medicine</string>
+    <string name="medicine">Medicine/Supplement</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="select_date">Select date</string>
@@ -19,5 +19,6 @@
     <string name="during_days">days</string>
     <string name="eight_hrs">8</string>
     <string name="five_days">5</string>
+    <string name="not_empty_fields_program">Program can\'t have empty fields</string>
 
 </resources>

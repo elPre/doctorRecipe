@@ -1,4 +1,3 @@
 package com.recippie.doctor.app.interfaces
 
-interface BaseInterface: OpenFragment {
-}
+interface BaseInterface: OpenFragment

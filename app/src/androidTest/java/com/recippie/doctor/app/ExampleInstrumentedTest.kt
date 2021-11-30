@@ -103,8 +103,8 @@ class ExampleInstrumentedTest {
 
         val listReceipt = listOf(Receipt(description = "medicine", eachTime = "8", duringTime = "3"))
 
-        val programList = bo.calculateDateAndTime(LocalDateTime.now(), listReceipt)
-        Log.d("this is the data","program list is --> $programList")
+        //val programList = bo.calculateDateAndTime(LocalDateTime.now(), listReceipt)
+        //Log.d("this is the data","program list is --> $programList")
 
     }
 }
