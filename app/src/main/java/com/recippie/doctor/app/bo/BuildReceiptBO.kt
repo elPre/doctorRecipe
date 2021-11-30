@@ -6,11 +6,12 @@ import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.IReceiptRepository
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
+import java.util.*
 
 class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
     override suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program> {
+
         if (list.isEmpty()) return emptyList()
         val resultList = mutableListOf<Program>()
 
@@ -19,24 +20,28 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
 
         val time: LocalDateTime = dateTime
 
-        list.forEach { receipt ->
+        list.reversed().forEach { receipt ->
             var localTime = time
-            resultList.add(Program(
-                medicine = receipt.description,
-                date = dateFormatter.format(time),
-                time = timeFormatter.format(time)
-            ))
-            var intakeTimes = 24/receipt.eachTime.toInt()*receipt.duringTime.toInt()
-            for (i in 2 until intakeTimes) {
-                localTime = localTime.plusHours(receipt.eachTime.toLong())
-                resultList.add(Program(
+            resultList.add(
+                Program(
                     medicine = receipt.description,
-                    date = dateFormatter.format(localTime),
-                    time = timeFormatter.format(localTime)
-                ))
+                    date = dateFormatter.format(time),
+                    time = timeFormatter.format(time)
+                )
+            )
+            val intakeTimes = 24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
+            for (i in 1 until intakeTimes) {
+                localTime = localTime.plusHours(receipt.eachTime.toLong())
+                resultList.add(
+                    Program(
+                        medicine = receipt.description,
+                        date = dateFormatter.format(localTime),
+                        time = timeFormatter.format(localTime)
+                    )
+                )
             }
         }
-        return resultList.sortedBy { it.date }.toList()
+        return resultList.toList()
     }
 
     override suspend fun buildAlarmsForReceipt(dates: List<Date>, times: Int) {
@@ -78,7 +83,8 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
                 description = it.description,
                 duringTime = it.duringTime,
-                eachTime = it.eachTime)
+                eachTime = it.eachTime
+            )
         }
         if (list[0].numReceipt != null) {
             repo.updateReceipt(dbList)
