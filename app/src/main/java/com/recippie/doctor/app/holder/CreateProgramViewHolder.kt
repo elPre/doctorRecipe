@@ -8,7 +8,9 @@ import com.recippie.doctor.app.pojo.CreateProgram
 class CreateProgramViewHolder(
     val binding: MedicineIntakeProgramItemBinding,
     val onAction: (ReceiptActionEvent) -> Unit,
-) : ReceiptBaseViewHolder<ModuleItemDataWrapper<CreateProgram>, MedicineIntakeProgramItemBinding>(binding) {
+) : ReceiptBaseViewHolder<ModuleItemDataWrapper<CreateProgram>, MedicineIntakeProgramItemBinding>(
+    binding
+) {
 
     override val ivLoading = null
 
@@ -21,6 +23,12 @@ class CreateProgramViewHolder(
                 onAction(ReceiptActionEvent.OpenClock)
             }
             btnProgram.setOnClickListener {
+                when {
+                    etStartDate.text.toString().isEmpty() || etStartTime.text.toString().isEmpty() -> {
+                        onAction(ReceiptActionEvent.NotEmptyFieldsAllowed)
+                        return@setOnClickListener
+                    }
+                }
                 onAction(ReceiptActionEvent.ProgramSchedule)
             }
         }

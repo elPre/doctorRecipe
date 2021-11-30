@@ -59,7 +59,7 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
                 return@launch
             }
         }
-        async { loadProgram() }
+        loadProgram()
     }
 
     override fun loadProgram() = viewModelScope.launch {
