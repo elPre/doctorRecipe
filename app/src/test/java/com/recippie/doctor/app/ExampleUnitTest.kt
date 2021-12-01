@@ -18,9 +18,9 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
 
         val list = listOf(
-            Receipt(description = "medicine 1", eachTime = "8", duringTime = "3"),
-            Receipt(description = "medicine 2", eachTime = "12", duringTime = "3"),
-            Receipt(description = "medicine 3", eachTime = "6", duringTime = "2")
+            //Receipt(description = "medicine 1", eachTime = "8", duringTime = "3"),
+            Receipt(description = "medicine 2", eachTime = "12", duringTime = "2"),
+            //Receipt(description = "medicine 3", eachTime = "6", duringTime = "2")
         )
 
         val FORMAT_DATE = "dd MMM yyyy"

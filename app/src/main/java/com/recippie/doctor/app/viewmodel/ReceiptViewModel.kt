@@ -13,9 +13,6 @@ class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), Ba
     val recipeList = _recipeList
 
     override fun loadReceiptPage(forceReload: Boolean) = viewModelScope.launch {
-        if (!forceReload) {
-            return@launch
-        }
         loadReceipt()
     }
 
