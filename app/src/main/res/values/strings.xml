@@ -20,5 +20,5 @@
     <string name="eight_hrs">8</string>
     <string name="five_days">5</string>
     <string name="not_empty_fields_program">Program can\'t have empty fields</string>
-
+    <string name="receipt_empty">Receipt can\'t be empty</string>
 </resources>

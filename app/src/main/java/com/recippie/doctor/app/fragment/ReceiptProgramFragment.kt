@@ -36,7 +36,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
         arguments?.let {
             val listReceipt = it.getParcelableArrayList<Receipt>(LIST_INFO)
             listReceipt?.run {
-                viewModel.setReceiptList(this.toList())
+                viewModel.setReceiptList(this)
             }
         }
         val isNewFragment = savedInstanceState == null

@@ -21,5 +21,5 @@
     <string name="eight_hrs">8</string>
     <string name="five_days">5</string>
     <string name="not_empty_fields_program">Programa no puede tener campos vacios</string>
-
+    <string name="receipt_empty">La receta no pueder estar vacía</string>
 </resources>

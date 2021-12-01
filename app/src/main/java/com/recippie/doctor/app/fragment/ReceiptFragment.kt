@@ -67,6 +67,8 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     setClickable(true)
                     isClicked = !isClicked
                     fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
+                } else {
+                    showSnackbar(getString(R.string.receipt_empty))
                 }
             }
             fabAction.setOnClickListener {
@@ -132,8 +134,8 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 val holder = recyclerView.findViewHolderForAdapterPosition(i)
                 if (holder != null) {
                     val description = holder.itemView.findViewById<View>(R.id.et_description) as EditText
-                    val during = holder.itemView.findViewById<View>(R.id.et_each_time) as EditText
-                    val each = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
+                    val each = holder.itemView.findViewById<View>(R.id.et_each_time) as EditText
+                    val during = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
                     val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
                     if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
                         showSnackbar(getString(R.string.not_empty_fields))
