@@ -9,4 +9,5 @@ data class Receipt(
     val description: String = "",
     val eachTime: String = "",
     val duringTime: String = "",
+    val numMedicine: Int? = null
 ) : Parcelable

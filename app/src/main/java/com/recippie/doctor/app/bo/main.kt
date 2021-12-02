@@ -1,11 +1,12 @@
 package com.recippie.doctor.app.bo
 
-fun main(args: Array<String>) {
-    //print(lengthOfLongestSubstring("aa"))
+fun main() {
+//    print(lengthOfLongestSubstring("aa"))
 //    println(myAtoi("9"))
 //    println(myAtoi("39"))
 //    print(myAtoi("369"))
-    println(romanToInt("VIII"))
+//    println(romanToInt("XIX"))
+    moveZeroes(intArrayOf(0,1,0,3,12))
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -45,9 +46,31 @@ fun romanToInt(s: String): Int {
     var value = 0
     while (i >= 0) {
         if(romanMap.containsKey(s[i].toString())) {
-            value += romanMap[s[i].toString()]!!
+            if(i < s.length - 1 && romanMap[s[i].toString()]!! < romanMap[s[i + 1].toString()]!!) {
+                value -= romanMap[s[i].toString()]!!
+            } else {
+                value += romanMap[s[i].toString()]!!
+            }
         }
         i--
     }
     return value
+}
+
+fun moveZeroes(nums: IntArray): Unit {
+/*
+Input: nums = [0,1,0,3,12]
+Output: [1,3,12,0,0]
+ */
+    var right = 0
+    var left = 0
+    while(right < nums.size) {
+        if(nums[right] > 0) {
+            nums[left] = nums[right]
+            nums[right] = 0
+            left++
+        }
+        right++
+    }
+    nums.forEach { print("$it,") }
 }

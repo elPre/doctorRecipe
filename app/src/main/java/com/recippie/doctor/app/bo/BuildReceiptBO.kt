@@ -63,7 +63,8 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                                 numReceipt = data.numReceipt,
                                 description = data.description,
                                 eachTime = data.eachTime,
-                                duringTime = data.duringTime
+                                duringTime = data.duringTime,
+                                numMedicine = data.numMedicine
                             )
                         }
                     } else {
@@ -83,7 +84,8 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
                 description = it.description,
                 duringTime = it.duringTime,
-                eachTime = it.eachTime
+                eachTime = it.eachTime,
+                numMedicine = it.numMedicine ?: 0
             )
         }
         if (list[0].numReceipt != null) {

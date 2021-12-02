@@ -14,5 +14,6 @@ class ReceiptHolder(
         etDuringTime.setText(item.duringTime)
         etEachTime.setText(item.eachTime)
         tvReceiptNumber.text = (item.numReceipt ?: "").toString()
+        tvNumMedicine.text = (item.numMedicine ?: "0").toString()
     }
 }
