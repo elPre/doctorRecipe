@@ -41,12 +41,14 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val isNewFragment = savedInstanceState == null
-        viewModel.loadReceiptPage(isNewFragment)
+        viewModel.recipeList.observe(::getLifecycle) {
+            adapter.setData(it)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.loadReceiptPage()
         with(binding) {
             rvRecipe.layoutManager = LinearLayoutManager(context).apply {
                 orientation = LinearLayoutManager.VERTICAL
@@ -74,10 +76,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             fabAction.setOnClickListener {
                 onAddButtonClicked()
             }
-        }
-
-        viewModel.recipeList.observe(viewLifecycleOwner) {
-            adapter.setData(it)
         }
     }
 
@@ -137,6 +135,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     val each = holder.itemView.findViewById<View>(R.id.et_each_time) as EditText
                     val during = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
                     val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
+                    val numMedicine = holder.itemView.findViewById<View>(R.id.tv_num_medicine) as TextView
                     if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
                         showSnackbar(getString(R.string.not_empty_fields))
                         return Pair(false, mutableListOf())
@@ -146,7 +145,8 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                             numReceipt = if (numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
                             description = description.text.toString(),
                             eachTime = each.text.toString(),
-                            duringTime = during.text.toString()
+                            duringTime = during.text.toString(),
+                            numMedicine = if (numMedicine.text.isNotBlank()) numMedicine.text.toString().toInt() else 0
                         )
                     )
                 }
