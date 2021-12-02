@@ -69,8 +69,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     setClickable(true)
                     isClicked = !isClicked
                     fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
-                } else {
-                    showSnackbar(getString(R.string.receipt_empty))
                 }
             }
             fabAction.setOnClickListener {
@@ -136,10 +134,21 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     val during = holder.itemView.findViewById<View>(R.id.et_during_time) as EditText
                     val numReceipt = holder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
                     val numMedicine = holder.itemView.findViewById<View>(R.id.tv_num_medicine) as TextView
-                    if (description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty()) {
-                        showSnackbar(getString(R.string.not_empty_fields))
-                        return Pair(false, mutableListOf())
+                    when {
+                        description.text.isNullOrEmpty() || each.text.isNullOrEmpty() || during.text.isNullOrEmpty() -> {
+                            showSnackbar(getString(R.string.not_empty_fields))
+                            return Pair(false, mutableListOf())
+                        }
+                        each.text.toString().toInt() > MAX_HRS ||  each.text.toString().toInt() <= MIN_VALUE -> {
+                            showSnackbar(getString(R.string.receipt_validation_max_hrs))
+                            return Pair(false, mutableListOf())
+                        }
+                        during.text.toString().toInt() > MAX_DAYS || during.text.toString().toInt() <= MIN_VALUE -> {
+                            showSnackbar(getString(R.string.receipt_validation_max_days))
+                            return Pair(false, mutableListOf())
+                        }
                     }
+
                     list.add(
                         Receipt(
                             numReceipt = if (numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
@@ -154,11 +163,15 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             viewModel.saveFormReceipt(list.toList())
             return Pair(first = true, second = list)
         }
+        showSnackbar(getString(R.string.receipt_empty))
         return Pair(false, mutableListOf())
     }
 
     companion object {
         const val TAG = "RecipeFragment"
+        private const val MAX_HRS = 24
+        private const val MAX_DAYS = 365
+        private const val MIN_VALUE = 0
         fun newInstance() = ReceiptFragment()
     }
 }

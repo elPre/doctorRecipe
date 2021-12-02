@@ -13,8 +13,8 @@
     <string name="time">Hora</string>
     <string name="select_date">Seleccionar fecha</string>
     <string name="select_time">Seleccionar hora</string>
-    <string name="time_picker_title">Select hora de alarma</string>
-    <string name="date_picker_title">Select fecha de alarma</string>
+    <string name="time_picker_title">Seleccionar hora de alarma</string>
+    <string name="date_picker_title">Seleccionar fecha de alarma</string>
     <string name="not_empty_fields">Receta no puede tener campos vacios</string>
     <string name="each_hrs">hrs</string>
     <string name="during_days">días</string>
@@ -23,4 +23,6 @@
     <string name="not_empty_fields_program">Programa no puede tener campos vacios</string>
     <string name="receipt_empty">La receta no pueder estar vacía</string>
     <string name="btn_save">Guardar</string>
+    <string name="receipt_validation_max_hrs">Solo acepta el rango de 1 a 24 hrs</string>
+    <string name="receipt_validation_max_days">Solo acepta el rango 1 a 365 días</string>
 </resources>

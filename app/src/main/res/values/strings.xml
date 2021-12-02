@@ -22,4 +22,6 @@
     <string name="not_empty_fields_program">Program can\'t have empty fields</string>
     <string name="receipt_empty">Receipt can\'t be empty</string>
     <string name="btn_save">Save</string>
+    <string name="receipt_validation_max_hrs">Only accepts the range from 1 to 24 hrs</string>
+    <string name="receipt_validation_max_days">Only accepts the range from 1 to 365 days</string>
 </resources>
