@@ -7,13 +7,17 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.drawable.ColorDrawable
+import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.pojo.Receipt
 
-class SwipeToDeleteCallback(context: Context, val adapter: ReceiptAdapter) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+class SwipeToDeleteCallback(context: Context, val adapter: ReceiptAdapter, val onDeleteReceipt: (Receipt) -> Unit) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete_white_24)
     private val intrinsicWidth = deleteIcon?.intrinsicWidth
@@ -64,6 +68,20 @@ class SwipeToDeleteCallback(context: Context, val adapter: ReceiptAdapter) : Ite
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+        val description = viewHolder.itemView.findViewById<View>(R.id.et_description) as EditText
+        val each = viewHolder.itemView.findViewById<View>(R.id.et_each_time) as EditText
+        val during = viewHolder.itemView.findViewById<View>(R.id.et_during_time) as EditText
+        val numReceipt = viewHolder.itemView.findViewById<View>(R.id.tv_receipt_number) as TextView
+        val numMedicine = viewHolder.itemView.findViewById<View>(R.id.tv_num_medicine) as TextView
+
         adapter.removeData(viewHolder.absoluteAdapterPosition)
+        onDeleteReceipt(Receipt(
+            numReceipt = if (numReceipt.text.isNotBlank()) numReceipt.text.toString().toLong() else null,
+            description = description.text.toString(),
+            eachTime = each.text.toString(),
+            duringTime = during.text.toString(),
+            numMedicine = if (numMedicine.text.isNotBlank()) numMedicine.text.toString().toInt() else 0
+        ))
     }
 }

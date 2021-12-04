@@ -95,6 +95,22 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
         }
     }
 
+    override suspend fun deleteReceipt(receiptDelete: Receipt) {
+        when {
+            receiptDelete.numMedicine == null || receiptDelete.numMedicine == 0 -> return
+            receiptDelete.numReceipt == null || receiptDelete.numReceipt == 0L -> return
+            else -> {
+                repo.deleteReceipt(ReceiptData(
+                    numMedicine = receiptDelete.numMedicine,
+                    numReceipt = receiptDelete.numReceipt,
+                    description = receiptDelete.description,
+                    eachTime = receiptDelete.eachTime,
+                    duringTime = receiptDelete.duringTime
+                ))
+            }
+        }
+    }
+
     companion object {
         private const val MILLISECONDS_IN_DAY = 86400000
         private const val FORMAT_DATE = "dd MMM yyyy"

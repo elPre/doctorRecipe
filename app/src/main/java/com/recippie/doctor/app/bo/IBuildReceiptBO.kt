@@ -5,7 +5,7 @@ import com.recippie.doctor.app.pojo.Receipt
 import java.time.LocalDateTime
 import java.util.Date
 
-interface IBuildReceiptBO : CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt, SaveReceipt
+interface IBuildReceiptBO : CalculateDate, BuildAlarmsReceipt, GetCurrentReceipt, SaveReceipt, DeleteReceipt
 
 interface CalculateDate {
     suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program>
@@ -21,4 +21,8 @@ interface GetCurrentReceipt {
 
 interface SaveReceipt {
     suspend fun saveReceipt(list: List<Receipt>)
+}
+
+interface DeleteReceipt {
+    suspend fun deleteReceipt(receiptDelete: Receipt)
 }

@@ -19,7 +19,7 @@ interface AddReceipt {
 }
 
 interface DeleteReceipt {
-    fun deleteReceipt(): Job
+    fun deleteReceipt(receiptDelete: Receipt): Job
 }
 
 interface SaveFormReceipt {

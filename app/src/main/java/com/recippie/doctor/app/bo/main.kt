@@ -6,7 +6,8 @@ fun main() {
 //    println(myAtoi("39"))
 //    print(myAtoi("369"))
 //    println(romanToInt("XIX"))
-    moveZeroes(intArrayOf(0,1,0,3,12))
+//    moveZeroes(intArrayOf(0,1,0,3,12))
+    print("result -> ${removeDuplicates(intArrayOf(0,0,1,1,1,2,2,3,3,4))}")
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -73,4 +74,22 @@ Output: [1,3,12,0,0]
         right++
     }
     nums.forEach { print("$it,") }
+}
+
+fun removeDuplicates(nums: IntArray): Int {
+/*
+Input: nums = [0,0,1,1,1,2,2,3,3,4]
+Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+ */
+    //always pos 0 its going to be the first one
+    var j = 0
+    for (i in 0 until nums.size - 1) {
+        if(nums[i] != nums[i + 1] ) {
+            nums[j++] = nums[i]
+        }
+    }
+    nums[j++] = nums[nums.size - 1]
+    nums.forEach { print("$it,") }
+    println()
+    return j
 }

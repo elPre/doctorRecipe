@@ -16,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
 import com.recippie.doctor.app.bo.BuildReceiptBO
+import com.recippie.doctor.app.data.ReceiptData
 import com.recippie.doctor.app.databinding.ReceiptFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
+import com.recippie.doctor.app.repository.DeleteReceipt
 import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SwipeToDeleteCallback
 import com.recippie.doctor.app.viewmodel.ReceiptViewModel
@@ -53,7 +55,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             rvRecipe.layoutManager = LinearLayoutManager(context).apply {
                 orientation = LinearLayoutManager.VERTICAL
             }
-            val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(requireContext(), adapter))
+            val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(requireContext(), adapter, ::onDeleteReceipt))
             itemTouchHelper.attachToRecyclerView(rvRecipe)
             rvRecipe.adapter = adapter
             fabCreate.setOnClickListener {
@@ -80,7 +82,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptFragmentBinding.inflate(inflater, container, false)
 
-    private fun onAction(action: ReceiptActionEvent) { }
+    private fun onAction(action: ReceiptActionEvent) {}
 
     private fun onAddButtonClicked() {
         setVisibility(isClicked)
@@ -139,7 +141,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                             showSnackbar(getString(R.string.not_empty_fields))
                             return Pair(false, mutableListOf())
                         }
-                        each.text.toString().toInt() > MAX_HRS ||  each.text.toString().toInt() <= MIN_VALUE -> {
+                        each.text.toString().toInt() > MAX_HRS || each.text.toString().toInt() <= MIN_VALUE -> {
                             showSnackbar(getString(R.string.receipt_validation_max_hrs))
                             return Pair(false, mutableListOf())
                         }
@@ -165,6 +167,10 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         }
         showSnackbar(getString(R.string.receipt_empty))
         return Pair(false, mutableListOf())
+    }
+
+    private fun onDeleteReceipt(receipt: Receipt) {
+        viewModel.deleteReceipt(receipt)
     }
 
     companion object {
