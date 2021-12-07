@@ -89,10 +89,10 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
 
     fun setDate(currentSelectedDate: Long) = viewModelScope.launch {
         val dateTime: LocalDateTime = LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(currentSelectedDate),
+            Instant.ofEpochMilli((currentSelectedDate+(24*60*60*1000))),
             ZoneId.systemDefault()
         )
-        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
         date = dateTime.toLocalDate()
         dateS = dateAsFormattedText
         updateDateAndTime()
