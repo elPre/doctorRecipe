@@ -18,10 +18,8 @@ import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.viewmodel.ProgramViewModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
 
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
@@ -84,11 +82,10 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
     }
 
     private fun showDatePicker() {
-        val locaDT: LocalDateTime = LocalDateTime.now()
         MaterialDatePicker.Builder
             .datePicker()
             .setTitleText(getString(R.string.date_picker_title))
-            .setSelection(locaDT.toMillis())
+            .setSelection(System.currentTimeMillis())
             .build().apply {
                 addOnPositiveButtonClickListener { dateInMillis -> onDateSelected(dateInMillis) }
             }.show(childFragmentManager, TAG)
