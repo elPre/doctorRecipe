@@ -55,7 +55,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
 
     private fun onAction(action: ReceiptActionEvent) {
         when (action) {
-            ReceiptActionEvent.SaveProgram -> Unit
+            ReceiptActionEvent.SaveProgram -> viewModel.setAlarms()
             ReceiptActionEvent.OpenCalendar -> showDatePicker()
             ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()

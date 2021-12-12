@@ -112,6 +112,10 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
         updateDateAndTime()
     }
 
+    fun setAlarms() {
+        TODO("Not yet implemented")
+    }
+
     companion object {
         private val loadingItems: MutableList<ModuleItemDataWrapper<ReceiptModuleItem>>
             get() = mutableListOf(
