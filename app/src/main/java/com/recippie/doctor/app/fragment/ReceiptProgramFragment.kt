@@ -94,8 +94,6 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
             }.show(childFragmentManager, TAG)
     }
 
-    fun LocalDateTime.toMillis(zone: ZoneId = ZoneId.systemDefault()) = atZone(zone)?.toInstant()?.toEpochMilli()
-
     private fun onDateSelected(dateTimeStampInMillis: Long) {
         viewModel.setDate(dateTimeStampInMillis)
     }
