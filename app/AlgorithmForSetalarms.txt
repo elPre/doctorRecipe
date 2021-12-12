@@ -1,0 +1,13 @@
+HAPPY PATH
+Case 1:
+From the app click save
+save on DB the holder that are in the recycler view
+set the alarm manager for each holder (row)
+
+Case 2:
+Restart / Turn off and Turn on the phone
+Run a receiver that inside runs a worker thread that does the following
+Have a query that return the same or equals as the current date
+set the alarm manager for each row
+
+WORST CASE:

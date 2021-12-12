@@ -1,5 +1,7 @@
 package com.recippie.doctor.app.bo
 
+import java.lang.StringBuilder
+
 fun main() {
 //    print(lengthOfLongestSubstring("aa"))
 //    println(myAtoi("9"))
@@ -7,7 +9,9 @@ fun main() {
 //    print(myAtoi("369"))
 //    println(romanToInt("XIX"))
 //    moveZeroes(intArrayOf(0,1,0,3,12))
-    print("result -> ${removeDuplicates(intArrayOf(0,0,1,1,1,2,2,3,3,4))}")
+//    print("result -> ${removeDuplicates(intArrayOf(0,0,1,1,1,2,2,3,3,4))}")
+    //addBinary("5","8")
+    appendString()
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -92,4 +96,50 @@ Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
     nums.forEach { print("$it,") }
     println()
     return j
+}
+
+fun addBinary(a: String, b: String): String {
+    //lets assume both strings are same size
+    when {
+        a.length > 10000 -> return ""
+        b.length > 10000 -> return ""
+    }
+
+//    var one = a.toInt()
+//    var two = a.toInt()
+//    var carry = 0
+//    while (two != 0) {
+//        carry = one and two
+//        one = one xor two
+//        two = carry shl 1
+//    }
+//    print(one)
+
+    var carry = 0
+    var aData = 0
+    var bData = 0
+    var result: StringBuilder = StringBuilder()
+    for (i in a.length-1 downTo 0) {
+        aData = a[i].code
+        if(carry > 0) {
+            when {
+                aData == 1 && bData == 1 -> {}
+                aData == 1 && bData == 0 -> {}
+                aData == 0 && bData == 1 -> {}
+                aData == 0 && bData == 0 -> {}
+            }
+        }
+
+        result.insert(0,"c")
+    }
+
+    return ""
+}
+
+fun appendString() {
+    var result = StringBuilder()
+    result.insert(0,"a")
+    result.insert(0,"b")
+    result.insert(0,"c")
+    println(result.toString())
 }
