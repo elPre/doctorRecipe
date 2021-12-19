@@ -1,14 +1,18 @@
 package com.recippie.doctor.app.bo
 
+import com.recippie.doctor.app.data.AlarmData
 import com.recippie.doctor.app.data.ReceiptData
 import com.recippie.doctor.app.pojo.Program
 import com.recippie.doctor.app.pojo.Receipt
+import com.recippie.doctor.app.repository.IAlarmRepository
 import com.recippie.doctor.app.repository.IReceiptRepository
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
+class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
+    private val alarmRepo: IAlarmRepository? = null) : IBuildReceiptBO {
 
     override suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program> {
 
@@ -26,17 +30,19 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 Program(
                     medicine = receipt.description,
                     date = dateFormatter.format(time),
-                    time = timeFormatter.format(time)
+                    time = timeFormatter.format(time),
+                    numReceipt = receipt.numReceipt ?: 0
                 )
             )
-            val intakeTimes = 24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
+            val intakeTimes = HRS_IN_DAY_24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
             for (i in 1 until intakeTimes) {
                 localTime = localTime.plusHours(receipt.eachTime.toLong())
                 resultList.add(
                     Program(
                         medicine = receipt.description,
                         date = dateFormatter.format(localTime),
-                        time = timeFormatter.format(localTime)
+                        time = timeFormatter.format(localTime),
+                        numReceipt = receipt.numReceipt ?: 0
                     )
                 )
             }
@@ -44,16 +50,12 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
         return resultList.toList()
     }
 
-    override suspend fun buildAlarmsForReceipt(dates: List<Date>, times: Int) {
-
-    }
-
     override suspend fun getCurrentReceipt(): List<Receipt> {
-        if (repo.existReceipt()) {
-            val lastReceipt = repo.getLastReceipt()
+        if (receiptRepo.existReceipt()) {
+            val lastReceipt = receiptRepo.getLastReceipt()
             lastReceipt?.run {
                 val currentTime = System.currentTimeMillis()
-                val receiptList = repo.getCurrentReceipt(this)
+                val receiptList = receiptRepo.getCurrentReceipt(this)
                 receiptList.filter {
                     currentTime < (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.duringTime.toLong())))
                 }.size.let {
@@ -88,10 +90,9 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
                 numMedicine = it.numMedicine ?: 0
             )
         }
-        if (list[0].numReceipt != null) {
-            repo.updateReceipt(dbList)
-        } else {
-            repo.insertReceipt(dbList)
+        when {
+            list[0].numReceipt != null -> receiptRepo.updateReceipt(dbList)
+            else -> receiptRepo.insertReceipt(dbList)
         }
     }
 
@@ -100,7 +101,7 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
             receiptDelete.numMedicine == null || receiptDelete.numMedicine == 0 -> return
             receiptDelete.numReceipt == null || receiptDelete.numReceipt == 0L -> return
             else -> {
-                repo.deleteReceipt(ReceiptData(
+                receiptRepo.deleteReceipt(ReceiptData(
                     numMedicine = receiptDelete.numMedicine,
                     numReceipt = receiptDelete.numReceipt,
                     description = receiptDelete.description,
@@ -111,9 +112,22 @@ class BuildReceiptBO(private val repo: IReceiptRepository) : IBuildReceiptBO {
         }
     }
 
+    override suspend fun saveProgram(list: List<Program>) {
+        alarmRepo?.insertAlarm(
+            list.map {
+                AlarmData(
+                    numReceipt = it.numReceipt,
+                    alarm = Date(),
+                    message = it.medicine
+                )
+            }
+        )
+    }
+
     companion object {
         private const val MILLISECONDS_IN_DAY = 86400000
         private const val FORMAT_DATE = "dd MMM yyyy"
         private const val FORMAT_TIME = "hh:mm a"
+        private const val HRS_IN_DAY_24 = 24
     }
 }

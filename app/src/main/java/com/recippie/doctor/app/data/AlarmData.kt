@@ -7,8 +7,8 @@ import java.util.*
 
 @Entity(tableName = "alarmdata")
 data class AlarmData(
-    @ColumnInfo(name = "num_alarm") @PrimaryKey (autoGenerate=true) val numAlarm: Int,
-    @ColumnInfo(name = "num_receipt") val numReceipt: Int,
+    @ColumnInfo(name = "num_alarm") @PrimaryKey (autoGenerate = true) val numAlarm: Int = 0,
+    @ColumnInfo(name = "num_receipt") val numReceipt: Long,
     @ColumnInfo(name = "alarm") val alarm: Date,
     @ColumnInfo(name = "message") val message: String
 )

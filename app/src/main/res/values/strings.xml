@@ -24,4 +24,5 @@
     <string name="btn_save">Save</string>
     <string name="receipt_validation_max_hrs">Only accepts the range from 1 to 24 hrs</string>
     <string name="receipt_validation_max_days">Only accepts the range from 1 to 365 days</string>
+    <string name="program_save">All the alarms have been set successfully</string>
 </resources>

@@ -11,7 +11,10 @@ fun main() {
 //    moveZeroes(intArrayOf(0,1,0,3,12))
 //    print("result -> ${removeDuplicates(intArrayOf(0,0,1,1,1,2,2,3,3,4))}")
     //addBinary("5","8")
-    appendString()
+    //appendString()
+    //kotlinUnion()
+    //kotlinIntersection()
+    enableDisableButton()
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -142,4 +145,56 @@ fun appendString() {
     result.insert(0,"b")
     result.insert(0,"c")
     println(result.toString())
+}
+
+fun kotlinUnion() {
+    val original = listOf(1,2,3)
+    val changingList = listOf(4,5,1)
+    val unionTest: Set<Int> = original.union(changingList)
+    println(unionTest)
+}
+
+fun kotlinIntersection() {
+    val original = listOf(1)
+    val changingList = emptyList<Int>()
+
+    val intersectionTest = original.intersect(changingList)
+
+
+
+    val shouldEnabled = intersectionTest.size != changingList.size
+    println("$intersectionTest and the button is enabled $shouldEnabled")
+}
+
+fun enableDisableButton() {
+    val original = listOf(1)
+    val changingList = listOf(1,2,3)
+
+    val mapOriginal = original.associateWith { it }
+    val mapChange = changingList.associateWith { it }
+
+    var isEnabled = false
+    run mapLabel@ {
+        if(original.size >= changingList.size) {
+            mapOriginal.forEach { (k, _) ->
+                if(mapChange.containsKey(k)) {
+                    isEnabled = false
+                } else {
+                    isEnabled = true
+                    return@mapLabel
+                }
+            }
+        } else {
+            mapChange.forEach  { (k, _) ->
+                if(mapOriginal.containsKey(k)) {
+                    isEnabled = false
+                } else {
+                    isEnabled = true
+                    return@mapLabel
+                }
+            }
+        }
+    }
+    println("and the button is enabled $isEnabled ")
+
 }

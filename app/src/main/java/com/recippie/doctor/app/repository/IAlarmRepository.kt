@@ -13,9 +13,9 @@ interface GetAlarmsAvailable {
 }
 
 interface InsertAlarm {
-    suspend fun insertAlarm(alarm: AlarmData)
+    suspend fun insertAlarm(alarms: List<AlarmData>)
 }
 
 interface RemoveAlarm {
-    suspend fun removeAlarm(alarm: AlarmData)
+    suspend fun removeAlarm(alarms: AlarmData)
 }

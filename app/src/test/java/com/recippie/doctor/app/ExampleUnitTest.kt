@@ -37,7 +37,8 @@ class ExampleUnitTest {
                 Program(
                     medicine = receipt.description,
                     date = dateFormatter.format(time),
-                    time = timeFormatter.format(time)
+                    time = timeFormatter.format(time),
+                    numReceipt = 0
                 )
             )
             val intakeTimes = 24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
@@ -47,7 +48,8 @@ class ExampleUnitTest {
                     Program(
                         medicine = receipt.description,
                         date = dateFormatter.format(localTime),
-                        time = timeFormatter.format(localTime)
+                        time = timeFormatter.format(localTime),
+                        numReceipt = 0
                     )
                 )
             }
