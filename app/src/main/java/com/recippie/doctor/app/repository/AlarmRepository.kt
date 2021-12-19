@@ -1,13 +1,18 @@
 package com.recippie.doctor.app.repository
 
-import com.recippie.doctor.app.dao.AlarmDao
+import android.app.Application
 import com.recippie.doctor.app.data.AlarmData
+import com.recippie.doctor.app.db.AppDataBase
 
-class AlarmRepository(private val alarmDao: AlarmDao): IAlarmRepository {
+class AlarmRepository(val app: Application): IAlarmRepository {
 
-    override suspend fun getAllAlarms(currentReceipt: Int) = alarmDao.getAllAlarmsForReceipt(currentReceipt)
+    private val alarmDao = AppDataBase.getInstance(app).alarmDao()
 
-    override suspend fun insertAlarm(alarm: AlarmData) = alarmDao.insertAlarm(alarm)
+    override suspend fun getAlarms(currentReceipt: Int) = alarmDao.getAlarmsForReceipt(currentReceipt)
+
+    override suspend fun getAlarmsAvailable(currentReceipt: Int) = alarmDao.getAlarmsAvailableForReceipt(currentReceipt)
+
+    override suspend fun insertAlarm(alarmList: List<AlarmData>) = alarmDao.insertAlarm(*alarmList.toTypedArray())
 
     override suspend fun removeAlarm(alarm: AlarmData) = alarmDao.delete(alarm)
 }

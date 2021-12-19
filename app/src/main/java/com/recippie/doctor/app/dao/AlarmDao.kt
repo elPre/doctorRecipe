@@ -9,7 +9,10 @@ import com.recippie.doctor.app.data.AlarmData
 @Dao
 interface AlarmDao {
     @Query("SELECT * FROM alarmdata WHERE num_receipt IN (:num_receipt)")
-    suspend fun getAllAlarmsForReceipt(num_receipt: Int): List<AlarmData>
+    suspend fun getAlarmsForReceipt(num_receipt: Int): List<AlarmData>
+
+    @Query("SELECT * FROM alarmdata WHERE num_receipt IN (:num_receipt) AND alarm >= date('now')")
+    suspend fun getAlarmsAvailableForReceipt(num_receipt: Int): List<AlarmData>
 
     @Insert
     suspend fun insertAlarm(vararg alarmData: AlarmData)

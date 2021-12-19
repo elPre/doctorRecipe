@@ -1,34 +1,26 @@
 package com.recippie.doctor.app.fragment
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ProgramAdapter
-import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
-import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.viewmodel.ProgramViewModel
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
     private val adapter = ProgramAdapter(::onAction)
-    private val viewModel: ProgramViewModel by viewModels {
-        ProgramViewModel.Factory(
-            BuildReceiptBO(ReceiptRepository(requireContext().applicationContext as Application))
-        )
-    }
+    private val viewModel: ProgramViewModel by activityViewModels()
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptProgramFragmentBinding.inflate(inflater, container, false)
@@ -51,11 +43,16 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
         viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
             adapter.submitList(moduleItems.toList())
         }
+        viewModel.communicatToUserKnowledge.observe(::getLifecycle) { saveProgram ->
+            if (saveProgram) {
+                showSnackbar(getString(R.string.program_save))
+            }
+        }
     }
 
     private fun onAction(action: ReceiptActionEvent) {
         when (action) {
-            ReceiptActionEvent.SaveProgram -> Unit
+            ReceiptActionEvent.SaveProgram -> viewModel.saveProgram()
             ReceiptActionEvent.OpenCalendar -> showDatePicker()
             ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()

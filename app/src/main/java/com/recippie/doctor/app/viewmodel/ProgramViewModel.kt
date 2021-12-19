@@ -1,29 +1,33 @@
 package com.recippie.doctor.app.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
 import com.beachbody.bod.base.moduleitems.isLoading
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseProgram
 import com.recippie.doctor.app.moduleitems.IModularViewModel
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.*
+import com.recippie.doctor.app.repository.AlarmRepository
+import com.recippie.doctor.app.repository.IAlarmRepository
+import com.recippie.doctor.app.repository.IReceiptRepository
+import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.immutable
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
+class ProgramViewModel(val app: Application) : AndroidViewModel(app),
     IModularViewModel<ReceiptItemType, ReceiptModuleItem>,
     BaseProgram {
 
-    private val _moduleItemsLiveData =
-        MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
+    private val receiptRepo: IReceiptRepository = ReceiptRepository(app)
+    private val programRepo: IAlarmRepository = AlarmRepository(app)
+    private val receiptBo: IBuildReceiptBO = BuildReceiptBO(receiptRepo, programRepo)
+    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
     private lateinit var date: LocalDate
@@ -31,6 +35,8 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
     private var dateS: String = ""
     private var timeS: String = ""
     private var receiptList: List<Receipt> = mutableListOf()
+    private var programList = listOf<Program>()
+    val communicatToUserKnowledge = MutableLiveData(false)
 
     override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
         set(value) {
@@ -68,14 +74,19 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
 
     override fun loadSchedule() = viewModelScope.launch {
         val dateTime = LocalDateTime.of(date, time)
-        val list = receiptBo.calculateDateAndTime(dateTime, receiptList).map {
+        programList = receiptBo.calculateDateAndTime(dateTime, receiptList)
+        val list = programList.map {
             ViewScheduleReceipt(it.medicine, it.date, it.time)
         }
         ViewScheduleProgram(list.toMutableList()).push(ModuleItemLoadingState.LOADED)
     }
 
-    override fun calculateAlarmDateTimes() = viewModelScope.launch {
-
+    override fun saveProgram() = viewModelScope.launch {
+        if(programList.isNotEmpty()) {
+            receiptBo.saveProgram(programList)
+            //set the alarm manager method
+            communicatToUserKnowledge.postValue(true)
+        }
     }
 
     override fun setReceiptList(list: List<Receipt>) {
@@ -92,7 +103,7 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
             Instant.ofEpochMilli((currentSelectedDate+(24*60*60*1000))),
             ZoneId.systemDefault()
         )
-        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+        val dateAsFormattedText: String = dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
         date = dateTime.toLocalDate()
         dateS = dateAsFormattedText
         updateDateAndTime()
@@ -112,6 +123,10 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
         updateDateAndTime()
     }
 
+    fun setAlarms() {
+
+    }
+
     companion object {
         private val loadingItems: MutableList<ModuleItemDataWrapper<ReceiptModuleItem>>
             get() = mutableListOf(
@@ -119,12 +134,4 @@ class ProgramViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(),
                 ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING)
             )
     }
-
-    class Factory(private val receiptBO: IBuildReceiptBO) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ProgramViewModel(receiptBO) as T
-        }
-    }
-
 }

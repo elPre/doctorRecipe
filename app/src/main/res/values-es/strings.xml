@@ -25,4 +25,5 @@
     <string name="btn_save">Guardar</string>
     <string name="receipt_validation_max_hrs">Solo acepta el rango de 1 a 24 hrs</string>
     <string name="receipt_validation_max_days">Solo acepta el rango 1 a 365 días</string>
+    <string name="program_save">Todas las alarmas han sido programadas exitosamente</string>
 </resources>

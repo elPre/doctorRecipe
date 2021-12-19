@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "receiptdata")
 data class ReceiptData(
-    @ColumnInfo(name = "num_medicine") @PrimaryKey (autoGenerate=true) var numMedicine: Int = 0,
+    @ColumnInfo(name = "num_medicine") @PrimaryKey (autoGenerate = true) var numMedicine: Int = 0,
     @ColumnInfo(name = "num_receipt") val numReceipt: Long,
     @ColumnInfo(name = "medicine") val description: String,
     @ColumnInfo(name = "each_time") val eachTime: String,
