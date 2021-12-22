@@ -27,12 +27,6 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            val listReceipt = it.getParcelableArrayList<Receipt>(LIST_INFO)
-            listReceipt?.run {
-                viewModel.setReceiptList(this)
-            }
-        }
         val isNewFragment = savedInstanceState == null
         viewModel.loadPage(isNewFragment)
     }

@@ -11,7 +11,7 @@ import com.recippie.doctor.app.data.Converters
 import com.recippie.doctor.app.dao.ReceiptDao
 import com.recippie.doctor.app.data.ReceiptData
 
-@Database(entities = [ReceiptData::class, AlarmData::class], version = 2, exportSchema = false)
+@Database(entities = [ReceiptData::class, AlarmData::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun receiptDao(): ReceiptDao

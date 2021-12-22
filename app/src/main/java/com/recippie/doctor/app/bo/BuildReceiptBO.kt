@@ -1,11 +1,13 @@
 package com.recippie.doctor.app.bo
 
+import android.annotation.SuppressLint
 import com.recippie.doctor.app.data.AlarmData
 import com.recippie.doctor.app.data.ReceiptData
 import com.recippie.doctor.app.pojo.Program
 import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.IAlarmRepository
 import com.recippie.doctor.app.repository.IReceiptRepository
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -101,27 +103,56 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
             receiptDelete.numMedicine == null || receiptDelete.numMedicine == 0 -> return
             receiptDelete.numReceipt == null || receiptDelete.numReceipt == 0L -> return
             else -> {
-                receiptRepo.deleteReceipt(ReceiptData(
+                receiptRepo.deleteReceipt(
+                    ReceiptData(
                     numMedicine = receiptDelete.numMedicine,
                     numReceipt = receiptDelete.numReceipt,
                     description = receiptDelete.description,
                     eachTime = receiptDelete.eachTime,
                     duringTime = receiptDelete.duringTime
-                ))
+                    )
+                )
             }
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     override suspend fun saveProgram(list: List<Program>) {
-        alarmRepo?.insertAlarm(
-            list.map {
-                AlarmData(
-                    numReceipt = it.numReceipt,
-                    alarm = Date(),
-                    message = it.medicine
+        val simpleDateFormat = SimpleDateFormat("$FORMAT_DATE $FORMAT_TIME")
+        val alarmDataList = if (list.isNotEmpty()) alarmRepo?.getAlarms(list[0].numReceipt) else emptyList()
+        when {
+            alarmDataList.isNullOrEmpty().not() -> { //Update
+                if (list.size == alarmDataList?.size) {
+                    val updateList = mutableListOf<AlarmData>()
+                    for (i in list.indices) {
+                        val updateData = list[i]
+                        val idRow = alarmDataList[i]
+                        val dateTime = updateData.date+" "+updateData.time
+                        updateList.add(
+                            AlarmData(
+                                numAlarm = idRow.numAlarm,
+                                numReceipt = updateData.numReceipt,
+                                alarm = simpleDateFormat.parse(dateTime) ?: Date(),
+                                message = updateData.medicine
+                            )
+                        )
+                    }
+                    alarmRepo?.updateAlarms(updateList)
+                }
+            }
+            else -> { //Save
+                alarmRepo?.insertAlarm(
+                    list.map {
+                        val dateTime = it.date+" "+it.time
+                        AlarmData(
+                            numReceipt = it.numReceipt,
+                            alarm = simpleDateFormat.parse(dateTime) ?: Date(),
+                            message = it.medicine
+                        )
+                    }
                 )
             }
-        )
+        }
     }
 
     companion object {
