@@ -2,14 +2,14 @@ package com.recippie.doctor.app.repository
 
 import com.recippie.doctor.app.data.AlarmData
 
-interface IAlarmRepository: GetAlarm, GetAlarmsAvailable, InsertAlarm, RemoveAlarm
+interface IAlarmRepository: GetAlarm, GetAlarmsAvailable, InsertAlarm, RemoveAlarm, UpdateAlarm
 
 interface GetAlarm {
-    suspend fun getAlarms(currentReceipt: Int): List<AlarmData>
+    suspend fun getAlarms(currentReceipt: Long): List<AlarmData>
 }
 
 interface GetAlarmsAvailable {
-    suspend fun getAlarmsAvailable(currentReceipt: Int): List<AlarmData>
+    suspend fun getAlarmsAvailable(currentReceipt: Long): List<AlarmData>
 }
 
 interface InsertAlarm {
@@ -18,4 +18,8 @@ interface InsertAlarm {
 
 interface RemoveAlarm {
     suspend fun removeAlarm(alarms: AlarmData)
+}
+
+interface UpdateAlarm {
+    suspend fun updateAlarms(alarms: List<AlarmData>)
 }

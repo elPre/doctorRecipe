@@ -15,6 +15,7 @@ import com.recippie.doctor.app.repository.AlarmRepository
 import com.recippie.doctor.app.repository.IAlarmRepository
 import com.recippie.doctor.app.repository.IReceiptRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
+import com.recippie.doctor.app.util.SingleLiveEvent
 import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.launch
 import java.time.*
@@ -36,7 +37,7 @@ class ProgramViewModel(val app: Application) : AndroidViewModel(app),
     private var timeS: String = ""
     private var receiptList: List<Receipt> = mutableListOf()
     private var programList = listOf<Program>()
-    val communicatToUserKnowledge = MutableLiveData(false)
+    val communicatToUserKnowledge: MutableLiveData<Boolean> = SingleLiveEvent()
 
     override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
         set(value) {
@@ -69,6 +70,7 @@ class ProgramViewModel(val app: Application) : AndroidViewModel(app),
     }
 
     override fun loadProgram() = viewModelScope.launch {
+        receiptList = receiptBo.getCurrentReceipt()
         CreateProgram(ProgramReceipt()).push(ModuleItemLoadingState.LOADED)
     }
 
@@ -87,10 +89,6 @@ class ProgramViewModel(val app: Application) : AndroidViewModel(app),
             //set the alarm manager method
             communicatToUserKnowledge.postValue(true)
         }
-    }
-
-    override fun setReceiptList(list: List<Receipt>) {
-        receiptList = list
     }
 
     private fun updateDateAndTime() = viewModelScope.launch {
@@ -121,10 +119,6 @@ class ProgramViewModel(val app: Application) : AndroidViewModel(app),
         timeS = selectedTime
 
         updateDateAndTime()
-    }
-
-    fun setAlarms() {
-
     }
 
     companion object {
