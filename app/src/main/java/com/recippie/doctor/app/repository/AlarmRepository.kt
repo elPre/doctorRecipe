@@ -12,7 +12,7 @@ class AlarmRepository(val app: Application): IAlarmRepository {
 
     override suspend fun getAlarmsAvailable(currentReceipt: Long) = alarmDao.getAlarmsAvailableForReceipt(currentReceipt)
 
-    override suspend fun insertAlarm(alarmList: List<AlarmData>) = alarmDao.insertAlarm(*alarmList.toTypedArray())
+    override suspend fun insertAlarm(alarms: List<AlarmData>) = alarmDao.insertAlarm(*alarms.toTypedArray())
 
     override suspend fun removeAlarm(alarm: AlarmData) = alarmDao.delete(alarm)
 

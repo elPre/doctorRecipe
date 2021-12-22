@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-class ProgramViewModel(val app: Application) : AndroidViewModel(app),
+class ProgramViewModel(val app: Application) : ViewModel(),
     IModularViewModel<ReceiptItemType, ReceiptModuleItem>,
     BaseProgram {
 
@@ -127,5 +127,12 @@ class ProgramViewModel(val app: Application) : AndroidViewModel(app),
                 ModuleItemDataWrapper(CreateProgram(), ModuleItemLoadingState.LOADING),
                 ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING)
             )
+    }
+
+    class Factory(private val app: Application) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ProgramViewModel(app) as T
+        }
     }
 }
