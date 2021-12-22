@@ -17,7 +17,7 @@ interface InsertAlarm {
 }
 
 interface RemoveAlarm {
-    suspend fun removeAlarm(alarms: AlarmData)
+    suspend fun removeAlarm(alarm: AlarmData)
 }
 
 interface UpdateAlarm {

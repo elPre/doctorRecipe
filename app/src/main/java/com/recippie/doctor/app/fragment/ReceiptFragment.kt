@@ -29,9 +29,7 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
 
     private val adapter = ReceiptAdapter(::onAction)
     private val viewModel: ReceiptViewModel by viewModels {
-        ReceiptViewModel.Factory(
-            BuildReceiptBO(ReceiptRepository(requireContext().applicationContext as Application))
-        )
+        ReceiptViewModel.Factory(requireContext().applicationContext as Application)
     }
 
     private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open) }

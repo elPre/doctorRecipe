@@ -1,14 +1,23 @@
 package com.recippie.doctor.app.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.*
 import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseReceipt
 import com.recippie.doctor.app.pojo.Receipt
+import com.recippie.doctor.app.repository.AlarmRepository
+import com.recippie.doctor.app.repository.IAlarmRepository
+import com.recippie.doctor.app.repository.IReceiptRepository
+import com.recippie.doctor.app.repository.ReceiptRepository
 import kotlinx.coroutines.launch
 
-class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), BaseReceipt {
+class ReceiptViewModel(app: Application) : ViewModel(), BaseReceipt {
 
+    private val receiptRepo: IReceiptRepository = ReceiptRepository(app)
+    private val programRepo: IAlarmRepository = AlarmRepository(app)
+    private val receiptBo: IBuildReceiptBO = BuildReceiptBO(receiptRepo, programRepo)
     private val _recipeList: MutableLiveData<MutableList<Receipt>> = MutableLiveData()
     val recipeList = _recipeList
 
@@ -36,10 +45,10 @@ class ReceiptViewModel(private val receiptBo: IBuildReceiptBO) : ViewModel(), Ba
     }
 
 
-    class Factory(private val receiptBO: IBuildReceiptBO) : ViewModelProvider.Factory {
+    class Factory(private val app: Application) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return ReceiptViewModel(receiptBO) as T
+            return ReceiptViewModel(app) as T
         }
     }
 }
