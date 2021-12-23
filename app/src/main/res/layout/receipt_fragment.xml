@@ -36,6 +36,18 @@
         android:clickable="true"
         android:focusable="true"
         android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/fab_history"
+        app:layout_constraintEnd_toEndOf="@+id/fab_history"
+        android:layout_marginBottom="16dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_history_24"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/fab_action"
         app:layout_constraintEnd_toEndOf="@+id/fab_action"
         android:layout_marginBottom="16dp" />
