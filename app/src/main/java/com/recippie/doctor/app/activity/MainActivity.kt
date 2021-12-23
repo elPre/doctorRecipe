@@ -17,6 +17,7 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if( savedInstanceState == null ) {
+
             openFragment(ReceiptFragment.newInstance(), ReceiptFragment.TAG)
         }
     }

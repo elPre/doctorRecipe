@@ -27,13 +27,6 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onResume()
         isSaveInstanceStateCalled = false
     }
-
-    protected fun showFragment(@IdRes layout: Int, fragment: Fragment, tag: String) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(layout, fragment, tag)
-            .commit()
-    }
 }
 
 abstract class BaseBindingActivity<VB : ViewBinding> : BaseActivity() {

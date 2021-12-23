@@ -71,6 +71,12 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                     fragmentDelegate?.openFragment(ReceiptProgramFragment.newInstance(infoForm.second), ReceiptProgramFragment.TAG)
                 }
             }
+            fabHistory.setOnClickListener {
+                setAnimation(true)
+                setClickable(true)
+                isClicked = !isClicked
+                fragmentDelegate?.openFragment(CurrentHistoryViewPagerFragment.newInstance(), CurrentHistoryViewPagerFragment.TAG)
+            }
             fabAction.setOnClickListener {
                 onAddButtonClicked()
             }
@@ -93,9 +99,11 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         if (!clicked) {
             binding.fabCreate.isVisible = true
             binding.fabProgram.isVisible = true
+            binding.fabHistory.isVisible = true
         } else {
             binding.fabCreate.isVisible = false
             binding.fabProgram.isVisible = false
+            binding.fabHistory.isVisible = false
         }
     }
 
@@ -103,10 +111,12 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         if (!clicked) {
             binding.fabCreate.startAnimation(fromBottom)
             binding.fabProgram.startAnimation(fromBottom)
+            binding.fabHistory.startAnimation(fromBottom)
             binding.fabAction.startAnimation(rotateOpen)
         } else {
             binding.fabCreate.startAnimation(toBottom)
             binding.fabProgram.startAnimation(toBottom)
+            binding.fabHistory.startAnimation(toBottom)
             binding.fabAction.startAnimation(rotateClose)
         }
     }
@@ -115,9 +125,11 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         if (!clicked) {
             binding.fabCreate.isClickable = true
             binding.fabProgram.isClickable = true
+            binding.fabHistory.isClickable = true
         } else {
             binding.fabCreate.isClickable = false
             binding.fabProgram.isClickable = false
+            binding.fabHistory.isClickable = false
         }
     }
 
