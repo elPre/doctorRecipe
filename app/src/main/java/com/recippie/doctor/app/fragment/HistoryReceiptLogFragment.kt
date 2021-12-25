@@ -6,6 +6,8 @@ import com.recippie.doctor.app.databinding.HistoryReceiptLogFragmentBinding
 
 class HistoryReceiptLogFragment : BaseBindingFragment<HistoryReceiptLogFragmentBinding>() {
 
+
+
     override fun inflateBinding(
         inflater: LayoutInflater,
         container: ViewGroup?

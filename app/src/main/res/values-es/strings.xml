@@ -28,4 +28,5 @@
     <string name="program_save">Todas las alarmas han sido programadas exitosamente</string>
     <string name="current_receipt_log">Receta Actual</string>
     <string name="history_receipt_log">Historial Recetas</string>
+    <string name="no_current_receipt">No hay información de receta actual</string>
 </resources>

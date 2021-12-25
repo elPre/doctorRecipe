@@ -138,7 +138,9 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                                 numAlarm = idRow.numAlarm,
                                 numReceipt = updateData.numReceipt,
                                 alarm = simpleDateFormat.parse(dateTime) ?: Date(),
-                                message = updateData.medicine
+                                message = updateData.medicine,
+                                dateText = updateData.date,
+                                timeText = updateData.time
                             )
                         )
                     }
@@ -152,12 +154,30 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                         AlarmData(
                             numReceipt = it.numReceipt,
                             alarm = simpleDateFormat.parse(dateTime) ?: Date(),
-                            message = it.medicine
+                            message = it.medicine,
+                            dateText = it.date,
+                            timeText = it.time
                         )
                     }
                 )
             }
         }
+    }
+
+    override suspend fun getCurrentAlarmList(): List<AlarmData> {
+
+        val alarmList = if (receiptRepo.existReceipt()) {
+
+            val lastReceipt = receiptRepo.getLastReceipt()
+            lastReceipt?.run {
+                 alarmRepo?.getAlarms(this)
+            } ?: emptyList()
+
+        } else {
+            emptyList()
+        }
+
+        return alarmList
     }
 
     companion object {

@@ -25,9 +25,7 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     IModularViewModel<ReceiptItemType, ReceiptModuleItem>,
     BaseProgram {
 
-    private val receiptRepo: IReceiptRepository = ReceiptRepository(app)
-    private val programRepo: IAlarmRepository = AlarmRepository(app)
-    private val receiptBo: IBuildReceiptBO = BuildReceiptBO(receiptRepo, programRepo)
+    private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
     private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
