@@ -6,9 +6,12 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "alarmdata")
-data class AlarmData(
+data class
+AlarmData(
     @ColumnInfo(name = "num_alarm") @PrimaryKey (autoGenerate = true) val numAlarm: Int = 0,
     @ColumnInfo(name = "num_receipt") val numReceipt: Long,
     @ColumnInfo(name = "alarm") val alarm: Date,
-    @ColumnInfo(name = "message") val message: String
+    @ColumnInfo(name = "message") val message: String,
+    @ColumnInfo(name = "date") val dateText: String,
+    @ColumnInfo(name = "time") val timeText: String
 )

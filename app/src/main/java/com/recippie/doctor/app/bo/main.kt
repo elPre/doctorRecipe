@@ -168,14 +168,14 @@ fun kotlinIntersection() {
 
 fun enableDisableButton() {
     val original = listOf(1)
-    val changingList = listOf(1,2,3)
+    val changingList = listOf(1,2)
 
     val mapOriginal = original.associateWith { it }
     val mapChange = changingList.associateWith { it }
 
     var isEnabled = false
     run mapLabel@ {
-        if(original.size >= changingList.size) {
+        if(original.size == changingList.size) {
             mapOriginal.forEach { (k, _) ->
                 if(mapChange.containsKey(k)) {
                     isEnabled = false
@@ -185,14 +185,7 @@ fun enableDisableButton() {
                 }
             }
         } else {
-            mapChange.forEach  { (k, _) ->
-                if(mapOriginal.containsKey(k)) {
-                    isEnabled = false
-                } else {
-                    isEnabled = true
-                    return@mapLabel
-                }
-            }
+            isEnabled = true
         }
     }
     println("and the button is enabled $isEnabled ")

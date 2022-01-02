@@ -27,4 +27,5 @@
     <string name="program_save">All the alarms have been set successfully</string>
     <string name="current_receipt_log">Current Receipt</string>
     <string name="history_receipt_log">Receipt History</string>
+    <string name="no_current_receipt">There is not current receipt data</string>
 </resources>
