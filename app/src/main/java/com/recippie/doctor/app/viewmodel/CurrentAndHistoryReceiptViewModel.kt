@@ -52,13 +52,16 @@ class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
         }
         when {
             currentReceiptList.isNullOrEmpty().not() -> {
-                ReceiptInfo(currentReceiptList.toMutableList()).push(ModuleItemLoadingState.LOADED)
                 EmptyData.push(ModuleItemLoadingState.LOADED)
+                ReceiptInfo(currentReceiptList.toMutableList()).push(ModuleItemLoadingState.LOADED)
             }
             else -> Unit
         }
     }
 
+    fun loadHistoryReceipts() = viewModelScope.launch {
+
+    }
 
     companion object {
         private val loadingItems: MutableList<ModuleItemDataWrapper<CurrentHistoryModuleItem>>

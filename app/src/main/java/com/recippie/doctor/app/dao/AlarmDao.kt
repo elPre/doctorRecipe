@@ -11,6 +11,9 @@ interface AlarmDao {
     @Query("SELECT * FROM alarmdata WHERE num_receipt IN (:num_receipt) AND alarm >= date('now')")
     suspend fun getAlarmsAvailableForReceipt(num_receipt: Long): List<AlarmData>
 
+    @Query("SELECT * FROM alarmdata WHERE num_receipt < (:num_receipt)")
+    suspend fun getHistoryAlarms(num_receipt: Long): List<AlarmData>
+
     @Insert
     suspend fun insertAlarm(vararg alarmData: AlarmData)
 

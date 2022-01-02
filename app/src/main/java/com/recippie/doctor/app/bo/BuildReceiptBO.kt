@@ -8,7 +8,6 @@ import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.repository.IAlarmRepository
 import com.recippie.doctor.app.repository.IReceiptRepository
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -83,18 +82,51 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
     override suspend fun saveReceipt(list: List<Receipt>) {
         if (list.isEmpty()) return
         val dateTimeInMilliseconds = System.currentTimeMillis()
-        val dbList = list.map {
-            ReceiptData(
-                numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
-                description = it.description,
-                duringTime = it.duringTime,
-                eachTime = it.eachTime,
-                numMedicine = it.numMedicine ?: 0
-            )
+        val newElementsList = mutableListOf<Receipt>()
+        list.forEach { receipt ->
+            if (receipt.numReceipt == null) {
+                newElementsList.add(receipt)
+            }
         }
+        val areAllNewItems = list.filter { it.numReceipt == null }
         when {
-            list[0].numReceipt != null -> receiptRepo.updateReceipt(dbList)
-            else -> receiptRepo.insertReceipt(dbList)
+            areAllNewItems.size == list.size -> {
+                receiptRepo.insertReceipt(list.map {
+                    ReceiptData(
+                        numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
+                        description = it.description,
+                        duringTime = it.duringTime,
+                        eachTime = it.eachTime,
+                        numMedicine = it.numMedicine ?: 0
+                    )
+                })
+            }
+            newElementsList.size > 0 -> {
+                val alreadyExistsNumReceipt = list.find { it.numReceipt != null }
+                if (alreadyExistsNumReceipt?.numReceipt != null) {
+                    receiptRepo.insertReceipt(
+                        newElementsList.map {
+                            ReceiptData(
+                                numReceipt = alreadyExistsNumReceipt.numReceipt,
+                                description = it.description,
+                                duringTime = it.duringTime,
+                                eachTime = it.eachTime,
+                                numMedicine = 0
+                            )
+                        }
+                    )
+                }
+                receiptRepo.updateReceipt(list.filter { it.numReceipt != null }.map {
+                    ReceiptData(
+                        numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
+                        description = it.description,
+                        duringTime = it.duringTime,
+                        eachTime = it.eachTime,
+                        numMedicine = it.numMedicine ?: 0
+                    )
+                })
+            }
+            else -> Unit
         }
     }
 
@@ -123,30 +155,55 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
 
     @SuppressLint("SimpleDateFormat")
     override suspend fun saveProgram(list: List<Program>) {
+
         val simpleDateFormat = SimpleDateFormat("$FORMAT_DATE $FORMAT_TIME")
         val alarmDataList = if (list.isNotEmpty()) alarmRepo?.getAlarms(list[0].numReceipt) else emptyList()
+
         when {
-            alarmDataList.isNullOrEmpty().not() -> { //Update
-                if (list.size == alarmDataList?.size) {
-                    val updateList = mutableListOf<AlarmData>()
-                    for (i in list.indices) {
-                        val updateData = list[i]
-                        val idRow = alarmDataList[i]
-                        val dateTime = updateData.date+" "+updateData.time
-                        updateList.add(
-                            AlarmData(
-                                numAlarm = idRow.numAlarm,
-                                numReceipt = updateData.numReceipt,
-                                alarm = simpleDateFormat.parse(dateTime) ?: Date(),
-                                message = updateData.medicine,
-                                dateText = updateData.date,
-                                timeText = updateData.time
-                            )
+
+            alarmDataList != null && list.size > alarmDataList.size -> {//there is new receipts in the
+
+                alarmDataList.let { alarmList ->
+                    alarmList.forEach {
+                        alarmRepo?.removeAlarm(it)
+                    }
+                }
+
+                alarmRepo?.insertAlarm(
+                    list.map {
+                        val dateTime = it.date+" "+it.time
+                        AlarmData(
+                            numReceipt = it.numReceipt,
+                            alarm = simpleDateFormat.parse(dateTime) ?: Date(),
+                            message = it.medicine,
+                            dateText = it.date,
+                            timeText = it.time
                         )
                     }
-                    alarmRepo?.updateAlarms(updateList)
-                }
+                )
+
             }
+
+            list.size == alarmDataList?.size -> { //Update
+                val updateList = mutableListOf<AlarmData>()
+                for (i in list.indices) {
+                    val updateData = list[i]
+                    val idRow = alarmDataList[i]
+                    val dateTime = updateData.date+" "+updateData.time
+                    updateList.add(
+                        AlarmData(
+                            numAlarm = idRow.numAlarm,
+                            numReceipt = updateData.numReceipt,
+                            alarm = simpleDateFormat.parse(dateTime) ?: Date(),
+                            message = updateData.medicine,
+                            dateText = updateData.date,
+                            timeText = updateData.time
+                        )
+                    )
+                }
+                alarmRepo?.updateAlarms(updateList)
+            }
+
             else -> { //Save
                 alarmRepo?.insertAlarm(
                     list.map {
@@ -165,19 +222,16 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
     }
 
     override suspend fun getCurrentAlarmList(): List<AlarmData> {
-
-        val alarmList = if (receiptRepo.existReceipt()) {
-
+        return receiptRepo.existReceipt().let {
             val lastReceipt = receiptRepo.getLastReceipt()
             lastReceipt?.run {
-                 alarmRepo?.getAlarms(this)
+                alarmRepo?.getAlarms(this)
             } ?: emptyList()
-
-        } else {
-            emptyList()
         }
+    }
 
-        return alarmList
+    override suspend fun getHistoryAlarms(): List<AlarmData> {
+        TODO("Not yet implemented")
     }
 
     companion object {

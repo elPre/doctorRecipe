@@ -12,12 +12,12 @@ import com.recippie.doctor.app.interfaces.BaseInterface
 
 class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
 
-    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding = ActivityMainBinding::inflate
+    override val bindingInflater: (LayoutInflater) -> ActivityMainBinding =
+        ActivityMainBinding::inflate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if( savedInstanceState == null ) {
-
+        if (savedInstanceState == null) {
             openFragment(ReceiptFragment.newInstance(), ReceiptFragment.TAG)
         }
     }
@@ -25,5 +25,17 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
     override fun openFragment(fragment: Fragment, tag: String) {
         supportFragmentManager.beginTransaction().replace(R.id.content_container, fragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).addToBackStack(tag).commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == ONE_FRAGMENT
+            && supportFragmentManager.fragments[0] is ReceiptFragment)
+            finish()
+        else
+            super.onBackPressed()
+    }
+
+    companion object {
+        private const val ONE_FRAGMENT = 1
     }
 }

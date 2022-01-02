@@ -7,7 +7,8 @@ import java.time.LocalDateTime
 import java.util.Date
 
 interface IBuildReceiptBO : CalculateDate,
-    GetCurrentReceipt, SaveReceipt, DeleteReceipt, SaveProgram, GetCurrentAlarmList
+    GetCurrentReceipt, SaveReceipt, DeleteReceipt,
+    SaveProgram, GetCurrentAlarmList, HistoryAlarms
 
 interface CalculateDate {
     suspend fun calculateDateAndTime(dateTime: LocalDateTime, list: List<Receipt>): List<Program>
@@ -31,4 +32,8 @@ interface SaveProgram {
 
 interface GetCurrentAlarmList {
     suspend fun getCurrentAlarmList() : List<AlarmData>
+}
+
+interface HistoryAlarms {
+    suspend fun getHistoryAlarms() : List<AlarmData>
 }
