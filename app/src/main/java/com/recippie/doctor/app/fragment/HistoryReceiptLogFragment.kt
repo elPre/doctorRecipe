@@ -3,6 +3,7 @@ package com.recippie.doctor.app.fragment
 import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.recippie.doctor.app.adapter.CurrentAndHistoryAdapter
@@ -19,7 +20,7 @@ class HistoryReceiptLogFragment : BaseBindingFragment<HistoryReceiptLogFragmentB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.loadCurrentReceipt()
+        viewModel.loadHistoryReceipts()
     }
 
     override fun inflateBinding(
@@ -27,6 +28,14 @@ class HistoryReceiptLogFragment : BaseBindingFragment<HistoryReceiptLogFragmentB
         container: ViewGroup?
     ) = HistoryReceiptLogFragmentBinding.inflate(inflater, container, false)
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.rvHistory.adapter = this@HistoryReceiptLogFragment.adapter
+        viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
+            adapter.submitList(moduleItems.toList())
+        }
+    }
 
     private fun onAction(action: CurrentHistoryActionEvent) { }
 
