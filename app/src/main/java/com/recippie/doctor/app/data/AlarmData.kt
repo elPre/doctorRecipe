@@ -13,5 +13,6 @@ AlarmData(
     @ColumnInfo(name = "alarm") val alarm: Date,
     @ColumnInfo(name = "message") val message: String,
     @ColumnInfo(name = "date") val dateText: String,
-    @ColumnInfo(name = "time") val timeText: String
+    @ColumnInfo(name = "time") val timeText: String,
+    @ColumnInfo(name = "during") val during: String
 )

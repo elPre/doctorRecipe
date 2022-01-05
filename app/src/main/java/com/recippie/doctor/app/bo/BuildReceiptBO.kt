@@ -32,7 +32,8 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                     medicine = receipt.description,
                     date = dateFormatter.format(time),
                     time = timeFormatter.format(time),
-                    numReceipt = receipt.numReceipt ?: 0
+                    numReceipt = receipt.numReceipt ?: 0,
+                    during = receipt.duringTime
                 )
             )
             val intakeTimes = HRS_IN_DAY_24 * receipt.duringTime.toInt() / receipt.eachTime.toInt()
@@ -43,7 +44,8 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                         medicine = receipt.description,
                         date = dateFormatter.format(localTime),
                         time = timeFormatter.format(localTime),
-                        numReceipt = receipt.numReceipt ?: 0
+                        numReceipt = receipt.numReceipt ?: 0,
+                        during = receipt.duringTime
                     )
                 )
             }
@@ -126,7 +128,17 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                     )
                 })
             }
-            else -> Unit
+            else -> {
+                receiptRepo.updateReceipt(list.map {
+                    ReceiptData(
+                        numReceipt = it.numReceipt ?: dateTimeInMilliseconds,
+                        description = it.description,
+                        duringTime = it.duringTime,
+                        eachTime = it.eachTime,
+                        numMedicine = it.numMedicine ?: 0
+                    )
+                })
+            }
         }
     }
 
@@ -161,7 +173,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
 
         when {
 
-            alarmDataList != null && list.size > alarmDataList.size -> {//there is new receipts in the
+            alarmDataList != null && (list.size > alarmDataList.size || list.size < alarmDataList.size) -> {//there is new receipts in the
 
                 alarmDataList.let { alarmList ->
                     alarmList.forEach {
@@ -177,11 +189,11 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                             alarm = simpleDateFormat.parse(dateTime) ?: Date(),
                             message = it.medicine,
                             dateText = it.date,
-                            timeText = it.time
+                            timeText = it.time,
+                            during = it.during ?: ""
                         )
                     }
                 )
-
             }
 
             list.size == alarmDataList?.size -> { //Update
@@ -197,7 +209,8 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                             alarm = simpleDateFormat.parse(dateTime) ?: Date(),
                             message = updateData.medicine,
                             dateText = updateData.date,
-                            timeText = updateData.time
+                            timeText = updateData.time,
+                            during = idRow.during
                         )
                     )
                 }
@@ -213,7 +226,8 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                             alarm = simpleDateFormat.parse(dateTime) ?: Date(),
                             message = it.medicine,
                             dateText = it.date,
-                            timeText = it.time
+                            timeText = it.time,
+                            during = it.during ?: ""
                         )
                     }
                 )
@@ -223,15 +237,24 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
 
     override suspend fun getCurrentAlarmList(): List<AlarmData> {
         return receiptRepo.existReceipt().let {
-            val lastReceipt = receiptRepo.getLastReceipt()
-            lastReceipt?.run {
-                alarmRepo?.getAlarms(this)
+            receiptRepo.getLastReceipt().run {
+                val currentTime = System.currentTimeMillis()
+                alarmRepo?.getAlarms(this ?: 0)?.filter {
+                    currentTime < (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.during.toLong())))
+                }
             } ?: emptyList()
         }
     }
 
     override suspend fun getHistoryAlarms(): List<AlarmData> {
-        TODO("Not yet implemented")
+        return receiptRepo.existReceipt().let {
+            receiptRepo.getLastReceipt().run {
+                val currentTime = System.currentTimeMillis()
+                alarmRepo?.getAlarms(this ?: 0)?.filter {
+                    currentTime > (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.during.toLong())))
+                }
+            } ?: emptyList()
+        }
     }
 
     companion object {

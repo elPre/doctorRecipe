@@ -60,7 +60,20 @@ class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
     }
 
     fun loadHistoryReceipts() = viewModelScope.launch {
-
+        val historyReceiptList = receiptBo.getHistoryAlarms().map {
+            ViewScheduleReceipt (
+                medicineName = it.message,
+                date = it.dateText,
+                time = it.timeText
+            )
+        }
+        when {
+            historyReceiptList.isNullOrEmpty().not() -> {
+                EmptyData.push(ModuleItemLoadingState.LOADED)
+                ReceiptInfo(historyReceiptList.toMutableList()).push(ModuleItemLoadingState.LOADED)
+            }
+            else -> Unit
+        }
     }
 
     companion object {
