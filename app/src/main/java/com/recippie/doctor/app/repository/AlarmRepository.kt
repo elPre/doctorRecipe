@@ -19,4 +19,8 @@ class AlarmRepository(val app: Application): IAlarmRepository {
     override suspend fun updateAlarms(alarms: List<AlarmData>) = alarmDao.update(*alarms.toTypedArray())
 
     override suspend fun getHistoryAlarms(currentReceipt: Long) = alarmDao.getHistoryAlarms(currentReceipt)
+
+    override suspend fun deleteSpecificAlarm(alarm: AlarmData) = alarmDao.deleteSpecificAlarm(alarm.numReceipt, alarm.message)
+
+    override suspend fun getSpecificAlarm(alarm: AlarmData) = alarmDao.getSpecificAlarm(alarm.numReceipt, alarm.message)
 }

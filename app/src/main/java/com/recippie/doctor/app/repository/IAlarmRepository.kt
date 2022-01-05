@@ -3,7 +3,8 @@ package com.recippie.doctor.app.repository
 import com.recippie.doctor.app.data.AlarmData
 
 interface IAlarmRepository: GetAlarm, GetAlarmsAvailable,
-    InsertAlarm, RemoveAlarm, UpdateAlarm, HistoryAlarms
+    InsertAlarm, RemoveAlarm, UpdateAlarm, HistoryAlarms,
+    DeleteSpecificAlarm, GetSpecificAlarm
 
 interface GetAlarm {
     suspend fun getAlarms(currentReceipt: Long): List<AlarmData>
@@ -27,4 +28,12 @@ interface UpdateAlarm {
 
 interface HistoryAlarms {
     suspend fun getHistoryAlarms(currentReceipt: Long): List<AlarmData>
+}
+
+interface DeleteSpecificAlarm {
+    suspend fun deleteSpecificAlarm(alarm: AlarmData)
+}
+
+interface GetSpecificAlarm {
+    suspend fun getSpecificAlarm(alarm: AlarmData) : List<AlarmData>
 }
