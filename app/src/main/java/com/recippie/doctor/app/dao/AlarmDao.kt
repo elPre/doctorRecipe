@@ -22,4 +22,10 @@ interface AlarmDao {
 
     @Update
     suspend fun update(vararg alarmData: AlarmData)
+
+    @Query("DELETE FROM alarmdata WHERE num_receipt = :num_receipt AND message = :message")
+    suspend fun deleteSpecificAlarm(num_receipt: Long, message: String)
+
+    @Query("SELECT * FROM alarmdata WHERE num_receipt = :num_receipt AND message = :message")
+    suspend fun getSpecificAlarm(num_receipt: Long, message: String): List<AlarmData>
 }

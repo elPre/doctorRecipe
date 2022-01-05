@@ -156,10 +156,17 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                     duringTime = receiptDelete.duringTime
                     )
                 )
-                alarmRepo?.getAlarms(receiptDelete.numReceipt)?.let { alarmList ->
-                    alarmList.forEach {
-                        alarmRepo.removeAlarm(it)
-                    }
+                alarmRepo?.getSpecificAlarm(
+                    AlarmData(
+                        numReceipt = receiptDelete.numReceipt,
+                        message = receiptDelete.description,
+                        during = "",
+                        timeText = "",
+                        dateText = "",
+                        alarm = Date()
+                    )
+                )?.let { alarmToDelete ->
+                    alarmRepo.deleteSpecificAlarm(alarm = alarmToDelete[0])
                 }
             }
         }
