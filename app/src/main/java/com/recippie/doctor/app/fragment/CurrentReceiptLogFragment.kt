@@ -5,18 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.recippie.doctor.app.adapter.CurrentAndHistoryAdapter
 import com.recippie.doctor.app.databinding.CurrentReceiptLogFragmentBinding
 import com.recippie.doctor.app.event.CurrentHistoryActionEvent
-import com.recippie.doctor.app.viewmodel.CurrentAndHistoryReceiptViewModel
+import com.recippie.doctor.app.viewmodel.CurrentReceiptViewModel
 
 class CurrentReceiptLogFragment : BaseBindingFragment<CurrentReceiptLogFragmentBinding>() {
 
     private val adapter = CurrentAndHistoryAdapter(::onAction)
-    private val viewModel : CurrentAndHistoryReceiptViewModel by viewModels {
-        CurrentAndHistoryReceiptViewModel.Factory(requireContext().applicationContext as Application)
+    private val viewModel : CurrentReceiptViewModel by viewModels {
+        CurrentReceiptViewModel.Factory(requireContext().applicationContext as Application)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

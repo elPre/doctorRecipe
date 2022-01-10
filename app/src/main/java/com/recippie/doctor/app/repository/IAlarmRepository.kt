@@ -27,7 +27,7 @@ interface UpdateAlarm {
 }
 
 interface HistoryAlarms {
-    suspend fun getHistoryAlarms(currentReceipt: Long): List<AlarmData>
+    suspend fun getAllAlarms(): List<AlarmData>
 }
 
 interface DeleteSpecificAlarm {

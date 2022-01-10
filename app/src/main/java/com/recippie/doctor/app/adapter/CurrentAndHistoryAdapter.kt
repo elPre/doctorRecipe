@@ -6,36 +6,34 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
 import com.recippie.doctor.app.databinding.CurrentHistoryInfoItemBinding
 import com.recippie.doctor.app.databinding.HeaderInfoReceiptItemBinding
-import com.recippie.doctor.app.databinding.MedicineIntakeScheduleItemBinding
 import com.recippie.doctor.app.event.CurrentHistoryActionEvent
 import com.recippie.doctor.app.holder.CurrentAndHistoryBaseViewHolder
 import com.recippie.doctor.app.holder.CurrentAndHistoryEmptyViewHolder
-import com.recippie.doctor.app.holder.CurrentAndHistoryInfoViewHolder
 import com.recippie.doctor.app.holder.CurrentAndHistoryParentViewHolder
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
-import com.recippie.doctor.app.pojo.CurrentHistoryModuleItem
-import com.recippie.doctor.app.pojo.CurrentHistoryType
+import com.recippie.doctor.app.pojo.CurrentModuleItem
+import com.recippie.doctor.app.pojo.CurrentType
 import com.recippie.doctor.app.util.inflater
 
-typealias CurrentHistoryBaseViewHolder = CurrentAndHistoryBaseViewHolder<ModuleItemDataWrapper<CurrentHistoryModuleItem>, ViewBinding>
+typealias CurrentHistoryBaseViewHolder = CurrentAndHistoryBaseViewHolder<ModuleItemDataWrapper<CurrentModuleItem>, ViewBinding>
 
 class CurrentAndHistoryAdapter(
     private val onAction: (CurrentHistoryActionEvent) -> Unit
-) : ListAdapter<ModuleItemDataWrapper<CurrentHistoryModuleItem>, CurrentHistoryBaseViewHolder>(
+) : ListAdapter<ModuleItemDataWrapper<CurrentModuleItem>, CurrentHistoryBaseViewHolder>(
     CurrentAndHistoryBaseItemDiff
 ) {
 
     @Suppress("UNCHECKED_CAST")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        when (CurrentHistoryType.values()[viewType]) {
-            CurrentHistoryType.EMPTY -> CurrentAndHistoryEmptyViewHolder(
+        when (CurrentType.values()[viewType]) {
+            CurrentType.EMPTY -> CurrentAndHistoryEmptyViewHolder(
                 HeaderInfoReceiptItemBinding.inflate(
                     parent.inflater,
                     parent,
                     false
                 ), onAction
             )
-            CurrentHistoryType.INFO -> CurrentAndHistoryParentViewHolder(
+            CurrentType.INFO -> CurrentAndHistoryParentViewHolder(
                 CurrentHistoryInfoItemBinding.inflate(
                     parent.inflater,
                     parent,
@@ -53,16 +51,16 @@ class CurrentAndHistoryAdapter(
 }
 
 object CurrentAndHistoryBaseItemDiff :
-    DiffUtil.ItemCallback<ModuleItemDataWrapper<CurrentHistoryModuleItem>>() {
+    DiffUtil.ItemCallback<ModuleItemDataWrapper<CurrentModuleItem>>() {
     override fun areItemsTheSame(
-        oldItem: ModuleItemDataWrapper<CurrentHistoryModuleItem>,
-        newItem: ModuleItemDataWrapper<CurrentHistoryModuleItem>
+        oldItem: ModuleItemDataWrapper<CurrentModuleItem>,
+        newItem: ModuleItemDataWrapper<CurrentModuleItem>
     ) =
         oldItem.data.id == newItem.data.id
 
     override fun areContentsTheSame(
-        oldItem: ModuleItemDataWrapper<CurrentHistoryModuleItem>,
-        newItem: ModuleItemDataWrapper<CurrentHistoryModuleItem>
+        oldItem: ModuleItemDataWrapper<CurrentModuleItem>,
+        newItem: ModuleItemDataWrapper<CurrentModuleItem>
     ) =
         oldItem.data == newItem.data && oldItem.loadingState == newItem.loadingState
 }
