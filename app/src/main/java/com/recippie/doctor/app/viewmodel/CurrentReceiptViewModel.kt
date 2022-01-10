@@ -16,14 +16,14 @@ import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.launch
 
-class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
-    IModularViewModel<CurrentHistoryType, CurrentHistoryModuleItem> {
+class CurrentReceiptViewModel (val app: Application) : ViewModel(),
+    IModularViewModel<CurrentType, CurrentModuleItem> {
 
     private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
-    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<CurrentHistoryModuleItem>>>()
+    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<CurrentModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
-    override var moduleItems = mutableListOf<ModuleItemDataWrapper<CurrentHistoryModuleItem>>()
+    override var moduleItems = mutableListOf<ModuleItemDataWrapper<CurrentModuleItem>>()
         set(value) {
             field = value
             _moduleItemsLiveData.value = value
@@ -36,7 +36,7 @@ class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
     }
 
     override fun pushModuleList(
-        data: List<ModuleItemDataWrapper<CurrentHistoryModuleItem>>,
+        data: List<ModuleItemDataWrapper<CurrentModuleItem>>,
         shouldAnimate: Boolean
     ) {
         _moduleItemsLiveData.postValue(data)
@@ -59,25 +59,9 @@ class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
         }
     }
 
-    fun loadHistoryReceipts() = viewModelScope.launch {
-        val historyReceiptList = receiptBo.getHistoryAlarms().map {
-            ViewScheduleReceipt (
-                medicineName = it.message,
-                date = it.dateText,
-                time = it.timeText
-            )
-        }
-        when {
-            historyReceiptList.isNullOrEmpty().not() -> {
-                EmptyData.push(ModuleItemLoadingState.LOADED)
-                ReceiptInfo(historyReceiptList.toMutableList()).push(ModuleItemLoadingState.LOADED)
-            }
-            else -> Unit
-        }
-    }
 
     companion object {
-        private val loadingItems: MutableList<ModuleItemDataWrapper<CurrentHistoryModuleItem>>
+        private val loadingItems: MutableList<ModuleItemDataWrapper<CurrentModuleItem>>
             get() = mutableListOf(
                 ModuleItemDataWrapper(EmptyData , ModuleItemLoadingState.LOADING),
                 ModuleItemDataWrapper(ReceiptInfo(), ModuleItemLoadingState.LOADING)
@@ -87,7 +71,7 @@ class CurrentAndHistoryReceiptViewModel (val app: Application) : ViewModel(),
     class Factory(private val app: Application) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return CurrentAndHistoryReceiptViewModel(app) as T
+            return CurrentReceiptViewModel(app) as T
         }
     }
 }

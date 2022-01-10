@@ -35,5 +35,5 @@ class CurrentHistoryViewPagerFragment : BaseBindingFragment<CurrentAndHistoryFra
 
 enum class Tabs(@StringRes val currentReceiptLog: Int) {
     CURRENT(R.string.current_receipt_log),
-    HISTORY(R.string.history_receipt_log)
+    HISTORY(R.string.history_receipt_log),
 }

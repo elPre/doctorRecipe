@@ -14,7 +14,8 @@ fun main() {
     //appendString()
     //kotlinUnion()
     //kotlinIntersection()
-    enableDisableButton()
+    //enableDisableButton()
+    addTwoNumberTest()
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -190,4 +191,77 @@ fun enableDisableButton() {
     }
     println("and the button is enabled $isEnabled ")
 
+}
+
+fun addTwoNumberTest() {
+    val listOne = ListNode(2)
+    listOne.next = ListNode(4)
+    listOne.next!!.next = ListNode(3)
+
+    val listTwo = ListNode(5)
+    listTwo.next = ListNode(6)
+    listTwo.next!!.next = ListNode(4)
+
+    //result 708
+
+    var finalList = addTwoNumbers(listOne, listTwo)
+    while (finalList != null) {
+       print(finalList.value)
+       finalList = finalList.next
+    }
+}
+
+
+class ListNode(var value: Int) {
+    var next: ListNode? = null
+}
+
+fun addTwoNumbers(l1: ListNode?, l2: ListNode?): ListNode? {
+    var result = ListNode(-1)
+    var walker = ListNode(-1)
+    var list1 = reverseLinkedList(l1)
+    var list2 = reverseLinkedList(l2)
+    var sum1 = 0
+    var sum2 = 0
+    var sumresult = 0
+    while (list1 != null || list2 != null) {
+        if (list1 !=  null) {
+            sum1 = (sum1 * 10) + list1.value
+        }
+        if (list2 != null) {
+            sum2 = (sum2 * 10) + list2.value
+        }
+        list1 =  list1?.next
+        list2 = list2?.next
+    }
+
+    sumresult = sum1 + sum2
+
+    while (sumresult > 0) {
+        val digit = sumresult % 10
+        sumresult /= 10
+        if (result.value == -1) {
+            result.value = digit
+            walker = result
+        } else {
+            walker.next = ListNode(digit)
+            walker = walker.next!!
+        }
+    }
+    return result
+}
+
+fun reverseLinkedList(l1: ListNode?): ListNode? {
+    var root = l1
+    var holder = l1
+    var tmp = l1?.next
+    var removePointer = l1
+    while (tmp != null) {
+        root = tmp
+        tmp = tmp.next
+        root.next = holder
+        holder = root
+    }
+    removePointer?.next = null
+    return root
 }

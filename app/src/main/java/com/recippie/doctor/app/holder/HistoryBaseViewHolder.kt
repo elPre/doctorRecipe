@@ -4,14 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.recippie.doctor.app.moduleitems.IValidateLoadingState
 import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
-import com.recippie.doctor.app.pojo.CurrentModuleItem
+import com.recippie.doctor.app.pojo.HistoryModuleItem
 
-abstract class CurrentAndHistoryBaseViewHolder<T : ModuleItemDataWrapper<CurrentModuleItem>, VB : ViewBinding>
+abstract class HistoryBaseViewHolder<T : ModuleItemDataWrapper<HistoryModuleItem>, VB : ViewBinding>
     (binding: VB,
-     private val getModuleItem: ((Int) -> CurrentModuleItem?)? = null)
+     private val getModuleItem: ((Int) -> HistoryModuleItem?)? = null)
     : RecyclerView.ViewHolder(binding.root), IValidateLoadingState {
 
-    val moduleItem: CurrentModuleItem?
+    val moduleItem: HistoryModuleItem?
         get() = getModuleItem?.invoke(bindingAdapterPosition)
 
     abstract fun bind(item: T)
