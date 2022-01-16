@@ -23,7 +23,7 @@ interface SaveReceipt {
 }
 
 interface DeleteReceipt {
-    suspend fun deleteReceipt(receiptDelete: Receipt)
+    suspend fun deleteReceipt(receiptDelete: Receipt, alarmDelete: IAlarmActions)
 }
 
 interface SaveProgram {

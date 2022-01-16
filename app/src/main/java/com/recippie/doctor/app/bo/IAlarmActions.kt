@@ -1,15 +1,13 @@
 package com.recippie.doctor.app.bo
 
-interface IAlarmActions: SetAlarm, CancelAlarm, BuildAlarm
+import com.recippie.doctor.app.data.AlarmData
 
-interface SetAlarm {
-    fun setAlarm()
-}
-
-interface CancelAlarm {
-    fun cancelAlarm()
-}
+interface IAlarmActions: BuildAlarm, DeleteAlarm
 
 interface BuildAlarm {
-    fun buildAlarm()
+    suspend fun buildAlarm()
+}
+
+interface DeleteAlarm {
+    suspend fun deleteAlarms(listToDelete: List<AlarmData>)
 }
