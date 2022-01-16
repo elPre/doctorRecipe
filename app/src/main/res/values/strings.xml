@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Medicine/Supplement Scheduler</string>
+    <string name="app_name">Medicine Scheduler</string>
     <string name="recipe_description">Dexametrozona 3 cap 500 mg this is a good test to se whats going on</string>
     <string name="each">Each</string>
     <string name="during">During</string>
@@ -28,4 +28,13 @@
     <string name="current_receipt_log">Current Receipt</string>
     <string name="history_receipt_log">Receipt History</string>
     <string name="no_current_receipt">There is not current receipt data</string>
+    <string name="alive_channel_id" translatable="false">alive_channel_id</string>
+    <string name="alive_channel_name" translatable="false">alive_channel_name</string>
+    <string name="notification_description" translatable="false">Notification when device is alive</string>
+    <string name="extended_fab_content_desc">Create</string>
+    <string name="extended_fab_label">Create</string>
+    <string name="extended_fab_label_receipt">Receipt</string>
+    <string name="extended_fab_label_program">Program</string>
+    <string name="extended_fab_label_observe">Observe</string>
+    <string name="title_reminder">Medicine Intake</string>
 </resources>

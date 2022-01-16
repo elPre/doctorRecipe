@@ -142,7 +142,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
         }
     }
 
-    override suspend fun deleteReceipt(receiptDelete: Receipt) {
+    override suspend fun deleteReceipt(receiptDelete: Receipt, alarmDelete: IAlarmActions) {
         when {
             receiptDelete.numMedicine == null || receiptDelete.numMedicine == 0 -> return
             receiptDelete.numReceipt == null || receiptDelete.numReceipt == 0L -> return
@@ -156,7 +156,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                     duringTime = receiptDelete.duringTime
                     )
                 )
-                alarmRepo?.getSpecificAlarm(
+                val specificAlarmToDelete = alarmRepo?.getSpecificAlarm(
                     AlarmData(
                         numReceipt = receiptDelete.numReceipt,
                         message = receiptDelete.description,
@@ -165,8 +165,10 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
                         dateText = "",
                         alarm = Date()
                     )
-                )?.let { alarmToDelete ->
-                    alarmRepo.deleteSpecificAlarm(alarm = alarmToDelete[0])
+                )
+                specificAlarmToDelete?.let {
+                    alarmDelete.deleteAlarms(it)
+                    alarmRepo?.deleteSpecificAlarm(alarm = it[0])
                 }
             }
         }
@@ -247,7 +249,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
             receiptRepo.getLastReceipt().run {
                 val currentTime = System.currentTimeMillis()
                 alarmRepo?.getAlarms(this ?: 0)?.filter {
-                    currentTime < (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.during.toLong())))
+                    currentTime < it.alarm.time
                 }
             } ?: emptyList()
         }
@@ -257,7 +259,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
         return receiptRepo.existReceipt().let {
             val currentTime = System.currentTimeMillis()
             alarmRepo?.getAllAlarms()?.filter {
-                currentTime > (it.numReceipt + (MILLISECONDS_IN_DAY.times(it.during.toLong())))
+                currentTime > it.alarm.time
             }
         } ?: emptyList()
 

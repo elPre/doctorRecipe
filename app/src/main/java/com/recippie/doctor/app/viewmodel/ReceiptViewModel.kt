@@ -3,6 +3,7 @@ package com.recippie.doctor.app.viewmodel
 import android.app.Application
 import androidx.lifecycle.*
 import com.recippie.doctor.app.adapter.ReceiptAdapter
+import com.recippie.doctor.app.bo.AlarmBO
 import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseReceipt
@@ -13,7 +14,7 @@ import com.recippie.doctor.app.repository.IReceiptRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
 import kotlinx.coroutines.launch
 
-class ReceiptViewModel(app: Application) : ViewModel(), BaseReceipt {
+class ReceiptViewModel(val app: Application) : ViewModel(), BaseReceipt {
 
     private val receiptRepo: IReceiptRepository = ReceiptRepository(app)
     private val programRepo: IAlarmRepository = AlarmRepository(app)
@@ -37,7 +38,7 @@ class ReceiptViewModel(app: Application) : ViewModel(), BaseReceipt {
     }
 
     override fun deleteReceipt(receiptDelete: Receipt) = viewModelScope.launch {
-        receiptBo.deleteReceipt(receiptDelete)
+        receiptBo.deleteReceipt(receiptDelete, AlarmBO(app))
     }
 
     override fun saveFormReceipt(list: List<Receipt>) = viewModelScope.launch {

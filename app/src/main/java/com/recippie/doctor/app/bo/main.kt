@@ -14,8 +14,12 @@ fun main() {
     //appendString()
     //kotlinUnion()
     //kotlinIntersection()
+
     //enableDisableButton()
-    addTwoNumberTest()
+    //addTwoNumberLinkedListTest()
+    println(addBinary("1111","1111")) //1001
+    println(addBinary("11","1")) //100
+    println(addBinary("1010","1011")) //10101
 }
 
 fun lengthOfLongestSubstring(s: String): Int {
@@ -109,35 +113,52 @@ fun addBinary(a: String, b: String): String {
         b.length > 10000 -> return ""
     }
 
-//    var one = a.toInt()
-//    var two = a.toInt()
-//    var carry = 0
-//    while (two != 0) {
-//        carry = one and two
-//        one = one xor two
-//        two = carry shl 1
-//    }
-//    print(one)
-
+    var one = a.length - 1
+    var two = b.length - 1
     var carry = 0
-    var aData = 0
-    var bData = 0
-    var result: StringBuilder = StringBuilder()
-    for (i in a.length-1 downTo 0) {
-        aData = a[i].code
-        if(carry > 0) {
+    var oneNum = 0
+    var twoNum = 0
+    var sum = 0
+    val result = StringBuilder()
+
+    while (one >= 0 || two >= 0) {
+
+        oneNum = if (one >= 0) a[one].digitToInt() else 0
+        twoNum = if (two >= 0) b[two].digitToInt() else 0
+
+        one--
+        two--
+
+        if (carry > 0) {
             when {
-                aData == 1 && bData == 1 -> {}
-                aData == 1 && bData == 0 -> {}
-                aData == 0 && bData == 1 -> {}
-                aData == 0 && bData == 0 -> {}
+                oneNum == 1 && twoNum == 1 -> {
+                    sum = 1
+                    carry = 1
+                }
+
+                oneNum != 0 || twoNum != 0 -> {
+                    sum = 0
+                    carry = 1
+                }
+
+                else -> {
+                    sum = 1
+                    carry = 0
+                }
             }
+        } else {
+            sum = oneNum xor twoNum
+            carry = oneNum and twoNum
         }
 
-        result.insert(0,"c")
+        result.insert(0, sum)
     }
 
-    return ""
+    if (carry > 0) {
+        result.insert(0, carry)
+    }
+
+    return result.toString()
 }
 
 fun appendString() {
@@ -160,8 +181,6 @@ fun kotlinIntersection() {
     val changingList = emptyList<Int>()
 
     val intersectionTest = original.intersect(changingList)
-
-
 
     val shouldEnabled = intersectionTest.size != changingList.size
     println("$intersectionTest and the button is enabled $shouldEnabled")
@@ -193,7 +212,7 @@ fun enableDisableButton() {
 
 }
 
-fun addTwoNumberTest() {
+fun addTwoNumberLinkedListTest() {
     val listOne = ListNode(2)
     listOne.next = ListNode(4)
     listOne.next!!.next = ListNode(3)
@@ -264,4 +283,37 @@ fun reverseLinkedList(l1: ListNode?): ListNode? {
     }
     removePointer?.next = null
     return root
+}
+
+class Node(var value: Int) {
+    var left: Node? = null
+    var right: Node? = null
+}
+
+fun treeToDoublyList(root:Node?): Node? {
+    val linkedList: Node? = null
+    traverseInOrder(root, linkedList)
+    return linkedList
+}
+
+fun traverseInOrder(root:Node?, linkedList:Node?) {
+    traverseInOrder(root?.left, linkedList)
+    createDoublyList(root, linkedList)
+    traverseInOrder(root?.right, linkedList)
+}
+
+fun createDoublyList(node:Node?, root:Node?) {
+    var tmp = root
+    if(root == null) {
+        tmp = Node(node?.value ?: 0)
+    } else {
+        var holder = tmp
+        while(tmp != null) {
+            holder = tmp
+            tmp = tmp.right
+        }
+        holder?.right = node
+        val newNode = holder?.right
+        newNode?.left = holder
+    }
 }

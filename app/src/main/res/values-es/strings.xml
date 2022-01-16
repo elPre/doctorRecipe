@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Calendarizador medicinas/suplementos</string>
+    <string name="app_name">Calendarizador medicinas</string>
     <string name="recipe_description">Dexametrozona 3 capsulas 500 mg</string>
     <string name="each">Cada</string>
     <string name="during">Durante</string>
@@ -29,4 +29,10 @@
     <string name="current_receipt_log">Receta Actual</string>
     <string name="history_receipt_log">Historial Recetas</string>
     <string name="no_current_receipt">No hay información de receta actual</string>
+    <string name="extended_fab_content_desc">Crear</string>
+    <string name="extended_fab_label">Crear</string>
+    <string name="title_reminder">Ingesta de medicina</string>
+    <string name="extended_fab_label_receipt">Receta</string>
+    <string name="extended_fab_label_program">Programa</string>
+    <string name="extended_fab_label_observe">Observar</string>
 </resources>

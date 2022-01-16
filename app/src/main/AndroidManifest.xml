@@ -21,9 +21,15 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".broadcast.RestoreAlarmsService">
+        <receiver android:name=".broadcast.RestoreAlarmsReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".bo.NotificationReceiver">
+            <intent-filter>
+                <action android:name="com.scheduler.receipts.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
 

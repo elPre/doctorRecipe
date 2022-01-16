@@ -5,7 +5,9 @@ import androidx.lifecycle.*
 import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
 import com.beachbody.bod.base.moduleitems.isLoading
 import com.google.android.material.timepicker.MaterialTimePicker
+import com.recippie.doctor.app.bo.AlarmBO
 import com.recippie.doctor.app.bo.BuildReceiptBO
+import com.recippie.doctor.app.bo.IAlarmActions
 import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseProgram
 import com.recippie.doctor.app.moduleitems.IModularViewModel
@@ -26,6 +28,7 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     BaseProgram {
 
     private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
+    private val alarmBo: IAlarmActions = AlarmBO(app)
     private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
     val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
@@ -85,6 +88,7 @@ class ProgramViewModel(val app: Application) : ViewModel(),
         if(programList.isNotEmpty()) {
             receiptBo.saveProgram(programList)
             //set the alarm manager method
+            alarmBo.buildAlarm()
             communicatToUserKnowledge.postValue(true)
         }
     }

@@ -112,12 +112,12 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             binding.fabCreate.startAnimation(fromBottom)
             binding.fabProgram.startAnimation(fromBottom)
             binding.fabHistory.startAnimation(fromBottom)
-            binding.fabAction.startAnimation(rotateOpen)
+            //binding.fabAction.startAnimation(rotateOpen)
         } else {
             binding.fabCreate.startAnimation(toBottom)
             binding.fabProgram.startAnimation(toBottom)
             binding.fabHistory.startAnimation(toBottom)
-            binding.fabAction.startAnimation(rotateClose)
+            //binding.fabAction.startAnimation(rotateClose)
         }
     }
 

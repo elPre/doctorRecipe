@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.recippie.doctor.app"
@@ -97,4 +97,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    /* WorkManager */
+    implementation "androidx.work:work-runtime-ktx:2.7.0"
 }
