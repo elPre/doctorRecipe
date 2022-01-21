@@ -15,13 +15,13 @@ class ReceiptAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceiptHolder {
         return ReceiptHolder(
-            ReceiptItemBinding.inflate(parent.inflater, parent, false), onAction
+            ReceiptItemBinding.inflate(parent.inflater, parent, false), onAction, ::getItem
         )
     }
 
     override fun getViewHolder(inflater: LayoutInflater, container: ViewGroup?, viewType: Int):
             BaseBindingViewHolder<Receipt, ReceiptItemBinding> {
         val binding = ReceiptItemBinding.inflate(inflater, container, false)
-        return ReceiptHolder(binding, onAction)
+        return ReceiptHolder(binding, onAction, ::getItem)
     }
 }

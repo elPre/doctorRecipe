@@ -9,5 +9,5 @@ enum class PushNotificationChannel(
     @StringRes val channelDescId: Int,
     val hasSound: Boolean,
 ) {
-    ALIVE(R.string.alive_channel_id,R.string.alive_channel_name,R.string.notification_description,true)
+    ALIVE(R.string.alive_channel_id, R.string.alive_channel_name, R.string.notification_description, true)
 }

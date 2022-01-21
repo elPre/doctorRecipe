@@ -3,13 +3,20 @@ package com.recippie.doctor.app.util
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.recippie.doctor.app.R
 
 object NotificationUtils {
+
+    private const val NOTIFICATION_GROUP = "SHOW_MEDICINES_NOTIFICATION"
+    private const val SUMMARY_ID = 0
+    const val EXTRA_OPEN_NOTIFICATION = "OPEN_NOTIFICATION_ACTION"
+    const val OPEN_NOTIFICATION_EXTRA_VALUE = 1
 
     fun buildNotificationManager(
         context: Context,
@@ -41,26 +48,44 @@ object NotificationUtils {
         }
     }
 
-    fun sendNotification(context: Context, title: String, messageBody: String) {
+    fun sendNotification(context: Context, title: String, messageBody: String, clazz: Class<*>) {
+
+        val intent = Intent(context, clazz).apply {
+            putExtra(EXTRA_OPEN_NOTIFICATION, OPEN_NOTIFICATION_EXTRA_VALUE)
+        }
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(context, context.getString(PushNotificationChannel.ALIVE.channelId))
             .setSmallIcon(R.drawable.ic_profile_empty)
             .setColor(context.getColor(R.color.light_blue))
-            .setContentTitle("Medicine Intake")
+            .setContentTitle(context.getString(R.string.notification_title))
             .setContentText(title)
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(messageBody)
             )
             .setAutoCancel(true)
-            .setGroup("SHOW_MEDICINES_NOTIFICATION")
+            .setGroup(NOTIFICATION_GROUP)
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_MAX) //Important for heads-up notification
             .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE) //Important for heads-up notification
 
+        val summaryNotification = NotificationCompat.Builder(context, context.getString(PushNotificationChannel.ALIVE.channelId))
+            //set content text to support devices running API level < 24
+            .setSmallIcon(R.drawable.ic_profile_empty)
+            //build summary info into InboxStyle template
+            .setStyle(NotificationCompat.InboxStyle())
+            //specify which group this notification belongs to
+            .setGroup(NOTIFICATION_GROUP)
+            //set this notification as the summary for the group
+            .setGroupSummary(true)
+            .setSilent(true)
+            .build()
 
-        with(NotificationManagerCompat.from(context)) {
-            // notificationId is a unique int for each notification that you must define
-            notify(PushNotificationChannel.ALIVE.channelId, builder.build())
+        NotificationManagerCompat.from(context).apply {
+            val notificationId = System.currentTimeMillis().toInt()
+            notify(notificationId + 1, builder.build())
+            notify(SUMMARY_ID, summaryNotification)
         }
 
     }

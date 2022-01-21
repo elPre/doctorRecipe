@@ -39,7 +39,7 @@ open class BaseFragment : Fragment() {
     protected fun showSnackbar(msg: String, canDismiss: Boolean = true) {
         view?.let { Snackbar.make(it, msg, Snackbar.LENGTH_LONG) }
             ?.apply {
-                setTextColor(requireContext().getColor(R.color.white))
+                setTextColor(requireContext().getColor(R.color.black))
                 view.apply {
                     background =
                         AppCompatResources.getDrawable(

@@ -39,6 +39,7 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     private var receiptList: List<Receipt> = mutableListOf()
     private var programList = listOf<Program>()
     val communicatToUserKnowledge: MutableLiveData<Boolean> = SingleLiveEvent()
+    val constrainsDateTime: MutableLiveData<Boolean> = SingleLiveEvent()
 
     override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
         set(value) {
@@ -77,6 +78,10 @@ class ProgramViewModel(val app: Application) : ViewModel(),
 
     override fun loadSchedule() = viewModelScope.launch {
         val dateTime = LocalDateTime.of(date, time)
+        if (dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() < System.currentTimeMillis()) {
+            constrainsDateTime.postValue(true)
+            return@launch
+        }
         programList = receiptBo.calculateDateAndTime(dateTime, receiptList)
         val list = programList.map {
             ViewScheduleReceipt(it.medicine, it.date, it.time)
@@ -87,7 +92,6 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     override fun saveProgram() = viewModelScope.launch {
         if(programList.isNotEmpty()) {
             receiptBo.saveProgram(programList)
-            //set the alarm manager method
             alarmBo.buildAlarm()
             communicatToUserKnowledge.postValue(true)
         }

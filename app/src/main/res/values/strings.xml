@@ -37,4 +37,6 @@
     <string name="extended_fab_label_program">Program</string>
     <string name="extended_fab_label_observe">Observe</string>
     <string name="title_reminder">Medicine Intake</string>
+    <string name="notification_title">Medicine Intake</string>
+    <string name="constraintDateTime">Date or/and time can not be in the past</string>
 </resources>

@@ -6,4 +6,5 @@ sealed class ReceiptActionEvent {
     object SaveProgram : ReceiptActionEvent()
     object ProgramSchedule : ReceiptActionEvent()
     object NotEmptyFieldsAllowed : ReceiptActionEvent()
+    object HideButtons : ReceiptActionEvent()
 }

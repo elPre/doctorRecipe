@@ -258,7 +258,7 @@ class BuildReceiptBO(private val receiptRepo: IReceiptRepository,
     override suspend fun getHistoryAlarms(): List<AlarmData> {
         return receiptRepo.existReceipt().let {
             val currentTime = System.currentTimeMillis()
-            alarmRepo?.getAllAlarms()?.filter {
+            alarmRepo?.getAllAlarms()?.reversed()?.filter {
                 currentTime > it.alarm.time
             }
         } ?: emptyList()
