@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -17,7 +16,6 @@ import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
 import com.recippie.doctor.app.viewmodel.ProgramViewModel
-import com.recippie.doctor.app.viewmodel.ReceiptViewModel
 import java.time.LocalTime
 
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
@@ -47,6 +45,11 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
                 showSnackbar(getString(R.string.program_save))
             }
         }
+        viewModel.constrainsDateTime.observe(viewLifecycleOwner) { isConstrained ->
+            if (isConstrained) {
+                showSnackbar(getString(R.string.constraintDateTime))
+            }
+        }
     }
 
     private fun onAction(action: ReceiptActionEvent) {
@@ -56,6 +59,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
             ReceiptActionEvent.OpenClock -> showTimePicker()
             ReceiptActionEvent.ProgramSchedule -> viewModel.loadSchedule()
             ReceiptActionEvent.NotEmptyFieldsAllowed -> showSnackbar(getString(R.string.not_empty_fields_program))
+            else ->  Unit
         }
     }
 

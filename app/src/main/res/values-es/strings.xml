@@ -35,4 +35,6 @@
     <string name="extended_fab_label_receipt">Receta</string>
     <string name="extended_fab_label_program">Programa</string>
     <string name="extended_fab_label_observe">Observar</string>
+    <string name="notification_title">Medicine Intake</string>
+    <string name="constraintDateTime">Fecha y/o hora no pueden ser en pasado</string>
 </resources>

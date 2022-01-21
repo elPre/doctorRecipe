@@ -8,19 +8,28 @@ import android.content.Intent
 import com.recippie.doctor.app.data.AlarmData
 import com.recippie.doctor.app.repository.AlarmRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
+import java.util.*
 
 class AlarmBO(val context: Context) : IAlarmActions {
 
     override suspend fun buildAlarm() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
         val receiptRepo = BuildReceiptBO(ReceiptRepository(context as Application), AlarmRepository(context))
-        val currentAlarmList = receiptRepo.getCurrentAlarmList()
-
+        val currentAlarmList = receiptRepo.getCurrentAlarmList().groupBy { it.alarm }
         if(currentAlarmList.isNotEmpty()) {
-            currentAlarmList.forEach { alarmData ->
-                val intent = createIntent(alarmData)
-                val pendingIntent = PendingIntent.getBroadcast(context, alarmData.alarm.time.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-                alarmManager?.setExact(AlarmManager.RTC_WAKEUP, alarmData.alarm.time, pendingIntent)
+            currentAlarmList.forEach { alarmDataList ->
+                var msg = ""
+                var noReceipt = 1
+                var date = Date()
+                alarmDataList.value.forEach {
+                    date = it.alarm
+                    msg += "$noReceipt.- ${it.message} \n"
+                    noReceipt++
+                }
+                val alarm = AlarmData(0, 1234, date, msg, "", "", "")
+                val intent = createIntent(alarm)
+                val pendingIntent = PendingIntent.getBroadcast(context, alarm.alarm.time.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                alarmManager?.setExact(AlarmManager.RTC_WAKEUP, alarm.alarm.time, pendingIntent)
             }
         }
     }

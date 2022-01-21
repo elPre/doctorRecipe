@@ -86,7 +86,18 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptFragmentBinding.inflate(inflater, container, false)
 
-    private fun onAction(action: ReceiptActionEvent) {}
+    private fun onAction(action: ReceiptActionEvent) {
+        when(action) {
+            ReceiptActionEvent.HideButtons -> {
+                if(isClicked) {
+                    setAnimation(true)
+                    setClickable(true)
+                    isClicked = !isClicked
+                }
+            }
+            else ->  Unit
+        }
+    }
 
     private fun onAddButtonClicked() {
         setVisibility(isClicked)
@@ -112,12 +123,10 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             binding.fabCreate.startAnimation(fromBottom)
             binding.fabProgram.startAnimation(fromBottom)
             binding.fabHistory.startAnimation(fromBottom)
-            //binding.fabAction.startAnimation(rotateOpen)
         } else {
             binding.fabCreate.startAnimation(toBottom)
             binding.fabProgram.startAnimation(toBottom)
             binding.fabHistory.startAnimation(toBottom)
-            //binding.fabAction.startAnimation(rotateClose)
         }
     }
 

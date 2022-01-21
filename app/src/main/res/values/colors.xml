@@ -12,4 +12,16 @@
     <color name="light_purple">#c0bafc</color>
     <color name="light_blue">#8fa5f4</color>
     <color name="light_sky">#cfe1ff</color>
+
+
+    <color name="primaryBlue">#2490FF</color>
+    <color name="nutriGreen">#1BCD7B</color>
+    <color name="navyBlue">#1357BE</color>
+
+    <color name="halfBlueCTA">#91C7FF</color>
+    <color name="skyBlue">#D1E8FF</color>
+    <color name="halfNutriGreen">#8DE6BD</color>
+    <color name="pollenYellow">#fff380</color>
+    <color name="creamBlue">#E8F4FF</color>
+
 </resources>

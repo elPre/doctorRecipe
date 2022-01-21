@@ -27,10 +27,11 @@
 
             <EditText
                 android:id="@+id/et_description"
-                android:layout_width="250dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lines="5"
                 android:layout_marginStart="3dp"
+                android:layout_marginEnd="5dp"
                 android:hint="@string/medicine"
                 tools:text="Dexametrozona 3 capsulas 500 mg" />
 
