@@ -13,15 +13,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.adapter.ReceiptAdapter
-import com.recippie.doctor.app.bo.BuildReceiptBO
-import com.recippie.doctor.app.data.ReceiptData
 import com.recippie.doctor.app.databinding.ReceiptFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
-import com.recippie.doctor.app.repository.DeleteReceipt
-import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SwipeToDeleteCallback
 import com.recippie.doctor.app.viewmodel.ReceiptViewModel
 
@@ -80,11 +77,31 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
             fabAction.setOnClickListener {
                 onAddButtonClicked()
             }
+
+            // Create an ad request.
+            val adRequest = AdRequest.Builder().build()
+            // Start loading the ad in the background.
+            binding.adView.loadAd(adRequest)
         }
     }
 
     override fun inflateBinding(inflater: LayoutInflater, container: ViewGroup?) =
         ReceiptFragmentBinding.inflate(inflater, container, false)
+
+    override fun onPause() {
+        super.onPause()
+        binding.adView.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adView.resume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.adView.destroy()
+    }
 
     private fun onAction(action: ReceiptActionEvent) {
         when(action) {

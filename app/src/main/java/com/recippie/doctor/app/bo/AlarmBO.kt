@@ -6,7 +6,10 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import com.recippie.doctor.app.data.AlarmData
+import com.recippie.doctor.app.data.CurrentAlarmData
 import com.recippie.doctor.app.repository.AlarmRepository
+import com.recippie.doctor.app.repository.CurrentAlarmRepository
+import com.recippie.doctor.app.repository.ICurrentAlarmRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
 import java.util.*
 
@@ -15,6 +18,9 @@ class AlarmBO(val context: Context) : IAlarmActions {
     override suspend fun buildAlarm() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
         val receiptRepo = BuildReceiptBO(ReceiptRepository(context as Application), AlarmRepository(context))
+        val currentAlarmSetUp = CurrentAlarmRepository(context)
+        getAndDeleteAlarmsThatWereSetBefore(currentAlarmSetUp)
+        val mutableListCurrentAlarmData = mutableListOf<CurrentAlarmData>()
         val currentAlarmList = receiptRepo.getCurrentAlarmList().groupBy { it.alarm }
         if(currentAlarmList.isNotEmpty()) {
             currentAlarmList.forEach { alarmDataList ->
@@ -30,6 +36,10 @@ class AlarmBO(val context: Context) : IAlarmActions {
                 val intent = createIntent(alarm)
                 val pendingIntent = PendingIntent.getBroadcast(context, alarm.alarm.time.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
                 alarmManager?.setExact(AlarmManager.RTC_WAKEUP, alarm.alarm.time, pendingIntent)
+                mutableListCurrentAlarmData.add(CurrentAlarmData(0, date, msg))
+            }
+            if(mutableListCurrentAlarmData.isNotEmpty()) {
+                currentAlarmSetUp.saveCurrentAlarm(mutableListCurrentAlarmData.toList())
             }
         }
     }
@@ -49,6 +59,18 @@ class AlarmBO(val context: Context) : IAlarmActions {
             action = SHOW_NOTIFICATION_ACTION
             putExtra(BODY_MSG, alarmData.message)
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+    }
+
+    private suspend fun getAndDeleteAlarmsThatWereSetBefore(currentAlarmRepo: ICurrentAlarmRepository) {
+        currentAlarmRepo.getCurrentAlarms().let {
+            if (it.isNotEmpty()) {
+                val alarmManagerListSetUpBefore = it.map { alarmData ->
+                    AlarmData(0, 0, alarmData.alarm, alarmData.message, "", "", "")
+                }
+                deleteAlarms(alarmManagerListSetUpBefore)
+                currentAlarmRepo.deleteAllAlarms()
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.gms.ads.MobileAds
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.databinding.ActivityMainBinding
 import com.recippie.doctor.app.fragment.CurrentHistoryViewPagerFragment
@@ -16,6 +17,12 @@ class MainActivity : BaseBindingActivity<ActivityMainBinding>(), BaseInterface {
 
     override val bindingInflater: (LayoutInflater) -> ActivityMainBinding =
         ActivityMainBinding::inflate
+
+    override fun onStart() {
+        super.onStart()
+        // Initialize the Mobile Ads SDK with an AdMob App ID.
+        MobileAds.initialize(this) {}
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

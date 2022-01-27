@@ -63,6 +63,7 @@ class HistoryReceiptViewModel (val app: Application) : ViewModel(),
     companion object {
         private val loadingItems: MutableList<ModuleItemDataWrapper<HistoryModuleItem>>
             get() = mutableListOf(
+                ModuleItemDataWrapper( HistoryBanner, ModuleItemLoadingState.LOADING),
                 ModuleItemDataWrapper(HeaderData , ModuleItemLoadingState.LOADING),
                 ModuleItemDataWrapper(HistoryInfo(), ModuleItemLoadingState.LOADING)
             )

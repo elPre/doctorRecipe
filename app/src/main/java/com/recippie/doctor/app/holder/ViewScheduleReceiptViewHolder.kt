@@ -2,6 +2,7 @@ package com.recippie.doctor.app.holder
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
 import com.recippie.doctor.app.adapter.CalculationProgramAdapter
 import com.recippie.doctor.app.databinding.MedicineIntakeViewScheduleSaveBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
@@ -35,7 +36,11 @@ class ViewScheduleReceiptViewHolder(
                 binding.tvMedicineName.isVisible = it > 0
                 binding.tvTime.isVisible = it > 0
                 binding.btnSaveSchedule.isVisible = it > 0
+                binding.adView.isVisible = it > 0
             }
+            val adRequest = AdRequest.Builder().build()
+            // Start loading the ad in the background.
+            binding.adView.loadAd(adRequest)
         }
     }
 }

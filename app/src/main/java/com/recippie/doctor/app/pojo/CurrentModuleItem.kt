@@ -11,8 +11,10 @@ sealed class CurrentModuleItem(override val itemType: CurrentType) :
 
 data class ReceiptInfo(val data: MutableList<ViewScheduleReceipt> = mutableListOf()) : CurrentModuleItem(CurrentType.INFO)
 object EmptyData : CurrentModuleItem(CurrentType.EMPTY)
+object CurrentBanner : CurrentModuleItem(CurrentType.BANNER)
 
 enum class CurrentType {
+    BANNER,
     EMPTY,
-    INFO
+    INFO,
 }
