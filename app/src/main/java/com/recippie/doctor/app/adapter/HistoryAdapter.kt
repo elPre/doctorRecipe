@@ -4,9 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import com.recippie.doctor.app.databinding.BannerHolderHistoryReceiptBinding
 import com.recippie.doctor.app.databinding.HeaderInfoReceiptItemBinding
 import com.recippie.doctor.app.databinding.HistoryInfoItemBinding
 import com.recippie.doctor.app.event.CurrentHistoryActionEvent
+import com.recippie.doctor.app.holder.HistoryBannerViewHolder
 import com.recippie.doctor.app.holder.HistoryBaseViewHolder
 import com.recippie.doctor.app.holder.HistoryEmptyViewHolder
 import com.recippie.doctor.app.holder.HistoryParentViewHolder
@@ -33,6 +35,13 @@ class HistoryAdapter(
             )
             HistoryType.HISTORY_INFO -> HistoryParentViewHolder(
                 HistoryInfoItemBinding.inflate(
+                    parent.inflater,
+                    parent,
+                    false
+                ), onAction
+            )
+            HistoryType.BANNER -> HistoryBannerViewHolder(
+                BannerHolderHistoryReceiptBinding.inflate(
                     parent.inflater,
                     parent,
                     false

@@ -131,7 +131,8 @@ class ProgramViewModel(val app: Application) : ViewModel(),
         private val loadingItems: MutableList<ModuleItemDataWrapper<ReceiptModuleItem>>
             get() = mutableListOf(
                 ModuleItemDataWrapper(CreateProgram(), ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING)
+                ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING),
+                ModuleItemDataWrapper(AdBanner, ModuleItemLoadingState.LOADING),
             )
     }
 

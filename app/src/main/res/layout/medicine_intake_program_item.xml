@@ -14,6 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="@string/program_intake_medicine"
+        android:textStyle="bold"
         tools:text="Programar toma de medicamento"/>
 
     <EditText

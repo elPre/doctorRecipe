@@ -9,10 +9,12 @@ sealed class ReceiptModuleItem(override val itemType: ReceiptItemType) :
         open val id: String = itemType.toString()
     }
 
+object AdBanner : ReceiptModuleItem(ReceiptItemType.INTAKE_AD_BANNER)
 data class CreateProgram(val data: ProgramReceipt?= null): ReceiptModuleItem(ReceiptItemType.INTAKE_PROGRAM_RECEIPT)
 data class ViewScheduleProgram(val data: MutableList<ViewScheduleReceipt> = mutableListOf()): ReceiptModuleItem(ReceiptItemType.INTAKE_VIEW_PROGRAM)
 
 enum class ReceiptItemType {
+    INTAKE_AD_BANNER,
     INTAKE_PROGRAM_RECEIPT,
-    INTAKE_VIEW_PROGRAM
+    INTAKE_VIEW_PROGRAM,
 }

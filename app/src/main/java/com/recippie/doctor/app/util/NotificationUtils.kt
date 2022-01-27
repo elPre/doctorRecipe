@@ -79,6 +79,7 @@ object NotificationUtils {
             .setGroup(NOTIFICATION_GROUP)
             //set this notification as the summary for the group
             .setGroupSummary(true)
+            .setAutoCancel(true)
             .setSilent(true)
             .build()
 

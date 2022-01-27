@@ -9,10 +9,12 @@ sealed class HistoryModuleItem(override val itemType: HistoryType) :
     val id: String = itemType.toString()
 }
 
+object HistoryBanner : HistoryModuleItem(HistoryType.BANNER)
 object HeaderData : HistoryModuleItem(HistoryType.HEADER)
 data class HistoryInfo(val data: MutableList<ViewScheduleReceipt> = mutableListOf()) : HistoryModuleItem(HistoryType.HISTORY_INFO)
 
 enum class HistoryType {
+    BANNER,
     HEADER,
     HISTORY_INFO
 }

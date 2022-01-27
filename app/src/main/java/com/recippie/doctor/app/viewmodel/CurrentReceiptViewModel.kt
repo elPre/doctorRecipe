@@ -64,7 +64,8 @@ class CurrentReceiptViewModel (val app: Application) : ViewModel(),
         private val loadingItems: MutableList<ModuleItemDataWrapper<CurrentModuleItem>>
             get() = mutableListOf(
                 ModuleItemDataWrapper(EmptyData , ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(ReceiptInfo(), ModuleItemLoadingState.LOADING)
+                ModuleItemDataWrapper(ReceiptInfo(), ModuleItemLoadingState.LOADING),
+                ModuleItemDataWrapper(CurrentBanner, ModuleItemLoadingState.LOADING)
             )
     }
 
