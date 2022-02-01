@@ -8,10 +8,8 @@ import com.google.android.gms.ads.MobileAds
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.databinding.ActivityMainBinding
 import com.recippie.doctor.app.fragment.CurrentHistoryViewPagerFragment
-//import com.recippie.doctor.app.fragment.CurrentHistoryViewPagerFragment
 import com.recippie.doctor.app.fragment.ReceiptFragment
 import com.recippie.doctor.app.fragment.Tabs
-//import com.recippie.doctor.app.fragment.Tabs
 import com.recippie.doctor.app.interfaces.BaseInterface
 import com.recippie.doctor.app.util.NotificationUtils
 
