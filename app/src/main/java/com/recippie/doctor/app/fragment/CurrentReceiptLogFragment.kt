@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.recippie.doctor.app.adapter.CurrentAndHistoryAdapter
+import com.recippie.doctor.app.adapter.AdapterSimple
 import com.recippie.doctor.app.databinding.CurrentReceiptLogFragmentBinding
-import com.recippie.doctor.app.event.CurrentHistoryActionEvent
+import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.viewmodel.CurrentReceiptViewModel
 
 class CurrentReceiptLogFragment : BaseBindingFragment<CurrentReceiptLogFragmentBinding>() {
 
-    private val adapter = CurrentAndHistoryAdapter(::onAction)
+    private val adapter = AdapterSimple(::onAction)
     private val viewModel : CurrentReceiptViewModel by viewModels {
         CurrentReceiptViewModel.Factory(requireContext().applicationContext as Application)
     }
@@ -29,12 +29,12 @@ class CurrentReceiptLogFragment : BaseBindingFragment<CurrentReceiptLogFragmentB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvCurrentHistory.adapter = this@CurrentReceiptLogFragment.adapter
-        viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
-            adapter.submitList(moduleItems.toList())
+        viewModel.moduleItem.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 
-    private fun onAction(action: CurrentHistoryActionEvent) { }
+    private fun onAction(action: ReceiptActionEvent) { }
 
     companion object {
         fun newInstance() = CurrentReceiptLogFragment()

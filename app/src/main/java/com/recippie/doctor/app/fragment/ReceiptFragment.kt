@@ -29,8 +29,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
         ReceiptViewModel.Factory(requireContext().applicationContext as Application)
     }
 
-    private val rotateOpen: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_open) }
-    private val rotateClose: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_close) }
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.from_bottom) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.to_bottom) }
 
@@ -78,7 +76,6 @@ class ReceiptFragment : BaseBindingFragment<ReceiptFragmentBinding>() {
                 onAddButtonClicked()
             }
 
-            // Create an ad request.
             val adRequest = AdRequest.Builder().build()
             // Start loading the ad in the background.
             binding.adView.loadAd(adRequest)

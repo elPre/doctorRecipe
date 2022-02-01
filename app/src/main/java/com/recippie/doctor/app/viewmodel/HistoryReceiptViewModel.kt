@@ -5,68 +5,36 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
 import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.bo.IBuildReceiptBO
-import com.recippie.doctor.app.moduleitems.IModularViewModel
-import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.repository.AlarmRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
-import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.launch
 
-class HistoryReceiptViewModel (val app: Application) : ViewModel(),
-    IModularViewModel<HistoryType, HistoryModuleItem> {
+class HistoryReceiptViewModel (val app: Application) : ViewModel() {
 
     private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
-    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<HistoryModuleItem>>>()
-    val moduleItemsLiveData = _moduleItemsLiveData.immutable
-
-    override var moduleItems = mutableListOf<ModuleItemDataWrapper<HistoryModuleItem>>()
-        set(value) {
-            field = value
-            _moduleItemsLiveData.value = value
-        }
-
-    init {
-        if (moduleItems.isEmpty()) {
-            moduleItems = loadingItems
-        }
-    }
-
-    override fun pushModuleList(
-        data: List<ModuleItemDataWrapper<HistoryModuleItem>>,
-        shouldAnimate: Boolean
-    ) {
-        _moduleItemsLiveData.postValue(data)
-    }
-
+    val moduleItem = MutableLiveData<List<ReceiptModuleItem>>()
 
     fun loadHistoryReceipts() = viewModelScope.launch {
         val historyReceiptList = receiptBo.getHistoryAlarms().map {
-            ViewScheduleReceipt (
+            ViewScheduleProgram(ViewScheduleReceipt (
                 medicineName = it.message,
                 date = it.dateText,
                 time = it.timeText
-            )
+            ))
         }
         when {
             historyReceiptList.isNullOrEmpty().not() -> {
-                HeaderData.push(ModuleItemLoadingState.LOADED)
-                HistoryInfo(historyReceiptList.toMutableList()).push(ModuleItemLoadingState.LOADED)
+                val listItems =  mutableListOf<ReceiptModuleItem>()
+                listItems.add(ObserveBannerHistoryTop)
+                listItems.add(HeaderInfoList)
+                listItems.addAll(historyReceiptList)
+                moduleItem.postValue(listItems.toList())
             }
             else -> Unit
         }
-    }
-
-    companion object {
-        private val loadingItems: MutableList<ModuleItemDataWrapper<HistoryModuleItem>>
-            get() = mutableListOf(
-                ModuleItemDataWrapper( HistoryBanner, ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(HeaderData , ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(HistoryInfo(), ModuleItemLoadingState.LOADING)
-            )
     }
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {

@@ -18,8 +18,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+
+        }
+        release {
+            storeFile file('/Users/hectorleyvavillanueva/Documents/MyProyects/ScheduleAppReleasekey/SheduleReceiptKey')
+            keyPassword 'Mimo123!@#'
+            storePassword 'Mimo123!@#'
+            keyAlias 'key0'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

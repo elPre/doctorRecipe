@@ -2,35 +2,24 @@ package com.recippie.doctor.app.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.beachbody.bod.base.moduleitems.ModuleItemLoadingState
-import com.beachbody.bod.base.moduleitems.isLoading
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.recippie.doctor.app.bo.AlarmBO
 import com.recippie.doctor.app.bo.BuildReceiptBO
 import com.recippie.doctor.app.bo.IAlarmActions
 import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.interfaces.BaseProgram
-import com.recippie.doctor.app.moduleitems.IModularViewModel
-import com.recippie.doctor.app.moduleitems.ModuleItemDataWrapper
 import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.repository.AlarmRepository
-import com.recippie.doctor.app.repository.IAlarmRepository
-import com.recippie.doctor.app.repository.IReceiptRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SingleLiveEvent
-import com.recippie.doctor.app.util.immutable
 import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-class ProgramViewModel(val app: Application) : ViewModel(),
-    IModularViewModel<ReceiptItemType, ReceiptModuleItem>,
-    BaseProgram {
+class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
 
     private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
     private val alarmBo: IAlarmActions = AlarmBO(app)
-    private val _moduleItemsLiveData = MutableLiveData<List<ModuleItemDataWrapper<ReceiptModuleItem>>>()
-    val moduleItemsLiveData = _moduleItemsLiveData.immutable
 
     private lateinit var date: LocalDate
     private lateinit var time: LocalTime
@@ -40,40 +29,18 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     private var programList = listOf<Program>()
     val communicatToUserKnowledge: MutableLiveData<Boolean> = SingleLiveEvent()
     val constrainsDateTime: MutableLiveData<Boolean> = SingleLiveEvent()
-
-    override var moduleItems = mutableListOf<ModuleItemDataWrapper<ReceiptModuleItem>>()
-        set(value) {
-            field = value
-            _moduleItemsLiveData.value = value
-        }
-
-    init {
-        if (moduleItems.isEmpty()) {
-            moduleItems = loadingItems
-        }
-    }
-
-    override fun pushModuleList(
-        data: List<ModuleItemDataWrapper<ReceiptModuleItem>>,
-        shouldAnimate: Boolean
-    ) {
-        _moduleItemsLiveData.postValue(data)
-    }
+    val moduleItem = MutableLiveData<List<ReceiptModuleItem>>()
 
     override fun loadPage(forceReload: Boolean) = viewModelScope.launch {
-        if (!forceReload) {
-            val isAnyModuleLoading = moduleItems.any { it.loadingState.isLoading }
-            if (!isAnyModuleLoading && moduleItems.isNotEmpty()) {
-                _moduleItemsLiveData.postValue(moduleItems)
-                return@launch
-            }
-        }
         loadProgram()
     }
 
     override fun loadProgram() = viewModelScope.launch {
         receiptList = receiptBo.getCurrentReceipt()
-        CreateProgram(ProgramReceipt()).push(ModuleItemLoadingState.LOADED)
+        val list =  mutableListOf<ReceiptModuleItem>()
+        list.add(ProgramBannerTop)
+        list.add(CreateProgram())
+        moduleItem.postValue(list.toList())
     }
 
     override fun loadSchedule() = viewModelScope.launch {
@@ -84,9 +51,16 @@ class ProgramViewModel(val app: Application) : ViewModel(),
         }
         programList = receiptBo.calculateDateAndTime(dateTime, receiptList)
         val list = programList.map {
-            ViewScheduleReceipt(it.medicine, it.date, it.time)
+            ViewScheduleProgram(ViewScheduleReceipt(it.medicine, it.date, it.time))
         }
-        ViewScheduleProgram(list.toMutableList()).push(ModuleItemLoadingState.LOADED)
+        val listItems =  mutableListOf<ReceiptModuleItem>()
+        listItems.add(ProgramBannerTop)
+        listItems.add((CreateProgram(ProgramReceipt(timeS, dateS))))
+        listItems.add(HeaderInfoList)
+        listItems.addAll(list)
+        listItems.add(ProgramSaveBtn)
+        listItems.add(ProgramBannerBottom)
+        moduleItem.postValue(listItems.toList())
     }
 
     override fun saveProgram() = viewModelScope.launch {
@@ -98,8 +72,10 @@ class ProgramViewModel(val app: Application) : ViewModel(),
     }
 
     private fun updateDateAndTime() = viewModelScope.launch {
-        setLoadingState(ReceiptItemType.INTAKE_PROGRAM_RECEIPT)
-        CreateProgram(ProgramReceipt(timeS, dateS)).push(ModuleItemLoadingState.LOADED)
+        val list =  mutableListOf<ReceiptModuleItem>()
+        list.add(ProgramBannerTop)
+        list.add(CreateProgram(ProgramReceipt(timeS, dateS)))
+        moduleItem.postValue(list.toList())
     }
 
     fun setDate(currentSelectedDate: Long) = viewModelScope.launch {
@@ -125,15 +101,6 @@ class ProgramViewModel(val app: Application) : ViewModel(),
         timeS = selectedTime
 
         updateDateAndTime()
-    }
-
-    companion object {
-        private val loadingItems: MutableList<ModuleItemDataWrapper<ReceiptModuleItem>>
-            get() = mutableListOf(
-                ModuleItemDataWrapper(CreateProgram(), ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(ViewScheduleProgram(), ModuleItemLoadingState.LOADING),
-                ModuleItemDataWrapper(AdBanner, ModuleItemLoadingState.LOADING),
-            )
     }
 
     class Factory(private val app: Application) : ViewModelProvider.Factory {

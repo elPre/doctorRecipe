@@ -11,7 +11,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.recippie.doctor.app.R
-import com.recippie.doctor.app.adapter.ProgramAdapter
+import com.recippie.doctor.app.adapter.AdapterSimple
 import com.recippie.doctor.app.databinding.ReceiptProgramFragmentBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.pojo.Receipt
@@ -20,7 +20,7 @@ import java.time.LocalTime
 
 class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding>() {
 
-    private val adapter = ProgramAdapter(::onAction)
+    private val adapter = AdapterSimple(::onAction)
     private val viewModel: ProgramViewModel by viewModels {
         ProgramViewModel.Factory(requireContext().applicationContext as Application)
     }
@@ -37,9 +37,11 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvReceiptProgram.adapter = this@ReceiptProgramFragment.adapter
-        viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
-            adapter.submitList(moduleItems.toList())
+
+        viewModel.moduleItem.observe(viewLifecycleOwner) { items ->
+            adapter.submitList(items)
         }
+
         viewModel.communicatToUserKnowledge.observe(::getLifecycle) { saveProgram ->
             if (saveProgram) {
                 showSnackbar(getString(R.string.program_save))
@@ -50,6 +52,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
                 showSnackbar(getString(R.string.constraintDateTime))
             }
         }
+
     }
 
     private fun onAction(action: ReceiptActionEvent) {
@@ -96,7 +99,7 @@ class ReceiptProgramFragment : BaseBindingFragment<ReceiptProgramFragmentBinding
     }
 
     companion object {
-        const val TAG = "ReceiptProgramFragment"
+        const val TAG = "ReceiptProgramFragmentTest"
         private const val LIST_INFO = "list-info"
         fun newInstance(listReceipt: List<Receipt>? = null) = ReceiptProgramFragment().apply {
             arguments = bundleOf(

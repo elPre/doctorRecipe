@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/medicine"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_date"
@@ -28,6 +29,7 @@
         app:layout_constraintRight_toRightOf="@+id/tv_time"
         app:layout_constraintHorizontal_weight="1"
         android:text="@string/date"
+        android:textStyle="bold"
         tools:text="Date"/>
 
     <TextView
@@ -40,6 +42,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_weight="1"
         android:text="@string/time"
+        android:textStyle="bold"
         tools:text="Time"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
