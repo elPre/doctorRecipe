@@ -6,7 +6,7 @@ import com.recippie.doctor.app.databinding.MedicineIntakeScheduleItemBinding
 import com.recippie.doctor.app.event.CurrentHistoryActionEvent
 import com.recippie.doctor.app.pojo.ViewScheduleReceipt
 
-class CurrentAndHistoryInfoViewHolder(
+class ProgramViewHolder(
     private val viewBinding: MedicineIntakeScheduleItemBinding,
     private val onAction: (CurrentHistoryActionEvent) -> Unit,
     private val getItem: (Int) -> ViewScheduleReceipt?
@@ -14,11 +14,10 @@ class CurrentAndHistoryInfoViewHolder(
 
     override fun bind(item: ViewScheduleReceipt) = with(viewBinding) {
         val color  = when {
-            bindingAdapterPosition   == 0 -> R.color.light_pink
-            bindingAdapterPosition%2 == 0 -> R.color.light_sky
-            bindingAdapterPosition%3 == 0 -> R.color.light_purple
-            bindingAdapterPosition%5 == 0 -> R.color.light_blue
-            else -> R.color.light_salmon
+            bindingAdapterPosition   == 0 -> R.color.halfBlueCTA
+            bindingAdapterPosition%2 == 0 -> R.color.skyBlue
+            bindingAdapterPosition%3 == 0 -> R.color.light_sky
+            else -> R.color.creamBlue
         }
         cvLayout.setBackgroundColor(ContextCompat.getColor(viewBinding.root.context, color))
         tvMedicineName.text = item.medicineName

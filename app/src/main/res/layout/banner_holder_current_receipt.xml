@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <!--
+    ca-app-pub-3331181764541043/7025753406
+    -->
     <com.google.android.gms.ads.AdView
         android:id="@+id/ad_view"
         android:layout_width="wrap_content"

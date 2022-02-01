@@ -4,25 +4,22 @@ import androidx.core.content.ContextCompat.getColor
 import com.recippie.doctor.app.R
 import com.recippie.doctor.app.databinding.MedicineIntakeScheduleItemBinding
 import com.recippie.doctor.app.event.ReceiptActionEvent
-import com.recippie.doctor.app.pojo.ViewScheduleReceipt
+import com.recippie.doctor.app.pojo.ViewScheduleProgram
 
 class ViewScheduleReceiptItemViewHolder(
     private val viewBinding: MedicineIntakeScheduleItemBinding,
     private val onAction: (ReceiptActionEvent) -> Unit,
-    private val getItem: (Int) -> ViewScheduleReceipt?
-): BaseBindingViewHolder<ViewScheduleReceipt, MedicineIntakeScheduleItemBinding>(viewBinding) {
+): BaseProgramViewHolder<ViewScheduleProgram>(viewBinding.root) {
 
-    override fun bind(item: ViewScheduleReceipt) = with(viewBinding) {
+    override fun bind(item: ViewScheduleProgram) = with(viewBinding) {
         val color  = when {
-            bindingAdapterPosition   == 0 -> R.color.halfBlueCTA
-            bindingAdapterPosition%2 == 0 -> R.color.skyBlue
-            bindingAdapterPosition%3 == 0 -> R.color.light_sky
-            bindingAdapterPosition%5 == 0 -> R.color.light_blue
-            else -> R.color.creamBlue
+            bindingAdapterPosition%2 == 0 -> R.color.light_sky
+            bindingAdapterPosition%3 == 0 -> R.color.light_purple
+            else -> R.color.light_salmon
         }
         cvLayout.setBackgroundColor(getColor(viewBinding.root.context, color))
-        tvMedicineName.text = item.medicineName
-        tvDate.text = item.date
-        tvTime.text = item.time
+        tvMedicineName.text = item.data?.medicineName
+        tvDate.text = item.data?.date
+        tvTime.text = item.data?.time
     }
 }

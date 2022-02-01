@@ -6,6 +6,66 @@
     android:layout_margin="5dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+<!--
+    <TextView
+        android:id="@+id/tv_intake_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/program_intake_medicine"
+        android:textStyle="bold"
+        tools:text="Programar toma de medicamento"/>
+
+    <EditText
+        android:id="@+id/et_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_intake_label"
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusableInTouchMode="false"
+        android:hint="@string/select_time"
+        tools:text="16:30"/>
+
+    <TextView
+        android:id="@+id/tv_start_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/et_start_time"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Hora de inicio (24 hrs)"
+        android:text="@string/start_time_intake"/>
+
+    <EditText
+        android:id="@+id/et_start_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_start_time_label"
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusableInTouchMode="false"
+        android:hint="@string/select_date"
+        tools:text="21/09/2021"/>
+
+    <TextView
+        android:id="@+id/tv_start_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/et_start_date"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Fecha de inicio"
+        android:text="@string/start_date_intake"/>
+
+    <Button
+        android:id="@+id/btn_program"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_start_date_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/btn_program"
+        tools:text="Program" />
+
 
     <TextView
         android:id="@+id/tv_medicine_name"
@@ -13,7 +73,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/medicine"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_program"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_date"
         app:layout_constraintHorizontal_weight="1"
@@ -25,7 +85,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_program"
         app:layout_constraintLeft_toRightOf="@+id/tv_medicine_name"
         app:layout_constraintRight_toRightOf="@+id/tv_time"
         app:layout_constraintHorizontal_weight="1"
@@ -38,7 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_program"
         app:layout_constraintLeft_toRightOf="@+id/tv_date"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_weight="1"
@@ -50,6 +110,7 @@
         android:id="@+id/rv_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_medicine_name"
         tools:listitem="@layout/medicine_intake_schedule_item" />
@@ -75,5 +136,5 @@
         app:layout_constraintTop_toBottomOf="@+id/btn_save_schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
+-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,10 +56,10 @@ object NotificationUtils {
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         val builder = NotificationCompat.Builder(context, context.getString(PushNotificationChannel.ALIVE.channelId))
-            .setSmallIcon(R.drawable.ic_profile_empty)
-            .setColor(context.getColor(R.color.light_blue))
+            .setSmallIcon(R.drawable.ic_round_notifications_24)
+            .setColor(context.getColor(R.color.nutriGreen))
             .setContentTitle(context.getString(R.string.notification_title))
-            .setContentText(title)
+            .setContentText(messageBody)
             .setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(messageBody)
@@ -72,7 +72,8 @@ object NotificationUtils {
 
         val summaryNotification = NotificationCompat.Builder(context, context.getString(PushNotificationChannel.ALIVE.channelId))
             //set content text to support devices running API level < 24
-            .setSmallIcon(R.drawable.ic_profile_empty)
+            .setSmallIcon(R.drawable.ic_round_notifications_24)
+            .setColor(context.getColor(R.color.nutriGreen))
             //build summary info into InboxStyle template
             .setStyle(NotificationCompat.InboxStyle())
             //specify which group this notification belongs to

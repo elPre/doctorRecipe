@@ -6,14 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- ca-app-pub-3331181764541043/3656148757 -->
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:adSize="BANNER"
+        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_recipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ad_view"
         tools:listitem="@layout/receipt_item" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -66,16 +77,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/rv_recipe"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/extended_fab_label" />
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/ad_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

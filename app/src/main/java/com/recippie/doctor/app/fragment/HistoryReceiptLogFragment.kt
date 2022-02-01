@@ -6,14 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.recippie.doctor.app.adapter.HistoryAdapter
+import com.recippie.doctor.app.adapter.AdapterSimple
 import com.recippie.doctor.app.databinding.HistoryReceiptLogFragmentBinding
-import com.recippie.doctor.app.event.CurrentHistoryActionEvent
+import com.recippie.doctor.app.event.ReceiptActionEvent
 import com.recippie.doctor.app.viewmodel.HistoryReceiptViewModel
 
 class HistoryReceiptLogFragment : BaseBindingFragment<HistoryReceiptLogFragmentBinding>() {
 
-    private val adapter = HistoryAdapter(::onAction)
+    private val adapter = AdapterSimple(::onAction)
     private val viewModel : HistoryReceiptViewModel by viewModels {
         HistoryReceiptViewModel.Factory(requireContext().applicationContext as Application)
     }
@@ -32,12 +32,12 @@ class HistoryReceiptLogFragment : BaseBindingFragment<HistoryReceiptLogFragmentB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvHistory.adapter = this@HistoryReceiptLogFragment.adapter
-        viewModel.moduleItemsLiveData.observe(::getLifecycle) { moduleItems ->
-            adapter.submitList(moduleItems.toList())
+        viewModel.moduleItem.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
         }
     }
 
-    private fun onAction(action: CurrentHistoryActionEvent) { }
+    private fun onAction(action: ReceiptActionEvent) { }
 
     companion object {
         fun newInstance() = HistoryReceiptLogFragment()
