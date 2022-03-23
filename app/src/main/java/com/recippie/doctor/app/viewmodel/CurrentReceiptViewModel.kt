@@ -10,6 +10,7 @@ import com.recippie.doctor.app.bo.IBuildReceiptBO
 import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.repository.AlarmRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CurrentReceiptViewModel (val app: Application) : ViewModel() {
@@ -17,7 +18,7 @@ class CurrentReceiptViewModel (val app: Application) : ViewModel() {
     private val receiptBo: IBuildReceiptBO = BuildReceiptBO(ReceiptRepository(app), AlarmRepository(app))
     val moduleItem = MutableLiveData<List<ReceiptModuleItem>>()
 
-    fun loadCurrentReceipt() = viewModelScope.launch {
+    fun loadCurrentReceipt() = viewModelScope.launch(Dispatchers.IO) {
         val currentReceiptList = receiptBo.getCurrentAlarmList().map {
             ViewScheduleProgram(ViewScheduleReceipt (
                 medicineName = it.message,

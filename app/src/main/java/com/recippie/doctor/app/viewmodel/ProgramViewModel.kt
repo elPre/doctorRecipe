@@ -12,6 +12,7 @@ import com.recippie.doctor.app.pojo.*
 import com.recippie.doctor.app.repository.AlarmRepository
 import com.recippie.doctor.app.repository.ReceiptRepository
 import com.recippie.doctor.app.util.SingleLiveEvent
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -31,11 +32,11 @@ class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
     val constrainsDateTime: MutableLiveData<Boolean> = SingleLiveEvent()
     val moduleItem = MutableLiveData<List<ReceiptModuleItem>>()
 
-    override fun loadPage(forceReload: Boolean) = viewModelScope.launch {
+    override fun loadPage(forceReload: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         loadProgram()
     }
 
-    override fun loadProgram() = viewModelScope.launch {
+    override fun loadProgram() = viewModelScope.launch(Dispatchers.IO) {
         receiptList = receiptBo.getCurrentReceipt()
         val list =  mutableListOf<ReceiptModuleItem>()
         list.add(ProgramBannerTop)
@@ -43,7 +44,7 @@ class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
         moduleItem.postValue(list.toList())
     }
 
-    override fun loadSchedule() = viewModelScope.launch {
+    override fun loadSchedule() = viewModelScope.launch(Dispatchers.IO) {
         val dateTime = LocalDateTime.of(date, time)
         if (dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() < System.currentTimeMillis()) {
             constrainsDateTime.postValue(true)
@@ -63,7 +64,7 @@ class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
         moduleItem.postValue(listItems.toList())
     }
 
-    override fun saveProgram() = viewModelScope.launch {
+    override fun saveProgram() = viewModelScope.launch(Dispatchers.IO) {
         if(programList.isNotEmpty()) {
             receiptBo.saveProgram(programList)
             alarmBo.buildAlarm()
@@ -71,14 +72,14 @@ class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
         }
     }
 
-    private fun updateDateAndTime() = viewModelScope.launch {
+    private fun updateDateAndTime() = viewModelScope.launch(Dispatchers.IO) {
         val list =  mutableListOf<ReceiptModuleItem>()
         list.add(ProgramBannerTop)
         list.add(CreateProgram(ProgramReceipt(timeS, dateS)))
         moduleItem.postValue(list.toList())
     }
 
-    fun setDate(currentSelectedDate: Long) = viewModelScope.launch {
+    fun setDate(currentSelectedDate: Long) = viewModelScope.launch(Dispatchers.IO) {
         val dateTime: LocalDateTime = LocalDateTime.ofInstant(
             Instant.ofEpochMilli((currentSelectedDate+(24*60*60*1000))),
             ZoneId.systemDefault()
@@ -89,7 +90,7 @@ class ProgramViewModel(val app: Application) : ViewModel(), BaseProgram {
         updateDateAndTime()
     }
 
-    fun setTime(timePicker: MaterialTimePicker) = viewModelScope.launch {
+    fun setTime(timePicker: MaterialTimePicker) = viewModelScope.launch(Dispatchers.IO) {
         val selectedTime = if (timePicker.hour > 12) {
             String.format("%02d", timePicker.hour - 12) + " : " +
                     String.format("%02d", timePicker.minute) + " PM"
