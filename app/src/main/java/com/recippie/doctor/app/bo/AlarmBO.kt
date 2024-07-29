@@ -34,7 +34,7 @@ class AlarmBO(val context: Context) : IAlarmActions {
                 }
                 val alarm = AlarmData(0, 1234, date, msg, "", "", "")
                 val intent = createIntent(alarm)
-                val pendingIntent = PendingIntent.getBroadcast(context, alarm.alarm.time.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                val pendingIntent = PendingIntent.getBroadcast(context, alarm.alarm.time.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
                 alarmManager?.setExact(AlarmManager.RTC_WAKEUP, alarm.alarm.time, pendingIntent)
                 mutableListCurrentAlarmData.add(CurrentAlarmData(0, date, msg))
             }
